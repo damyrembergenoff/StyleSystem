@@ -1,0 +1,468 @@
+@page "/profile"
+@layout AuthenticatedLayout
+
+<div class="profile-container">
+    <!-- Page Header -->
+    <div class="profile-header">
+        <div class="header-left">
+            <h1 class="page-title">My Profile</h1>
+            <p class="page-subtitle">Manage your personal information and preferences</p>
+        </div>
+        <div class="header-right">
+            @if (isEditing)
+            {
+                <button class="btn btn-outline" @onclick="CancelEdit">Cancel</button>
+                <button class="btn btn-primary" @onclick="SaveProfile" disabled="@isSaving">
+                    @if (isSaving)
+                    {
+                        <span>Saving...</span>
+                        <div class="spinner"></div>
+                    }
+                    else
+                    {
+                        <span>Save Changes</span>
+                    }
+                </button>
+            }
+            else
+            {
+                <button class="btn btn-primary" @onclick="EnableEdit">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    Edit Profile
+                </button>
+            }
+        </div>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="profile-content">
+        <!-- Left Column: Avatar & Stats -->
+        <div class="profile-sidebar">
+            <!-- Avatar Section -->
+            <div class="avatar-section">
+                <div class="avatar-wrapper">
+                    <div class="avatar-large">
+                        <span>@GetUserInitials()</span>
+                    </div>
+                    @if (isEditing)
+                    {
+                        <button class="avatar-change-btn" title="Change Avatar">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                        </button>
+                    }
+                </div>
+                <h2 class="user-display-name">@userProfile.FullName</h2>
+                <p class="user-username">@@@userProfile.Username</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <div class="stat-icon-small">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="stat-number">@totalRecommendations</div>
+                        <div class="stat-text">Recommendations</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon-small">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="stat-number">@savedStyles</div>
+                        <div class="stat-text">Saved Styles</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon-small">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="stat-number">@profileViews</div>
+                        <div class="stat-text">Profile Views</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Profile Form -->
+        <div class="profile-main">
+            <EditForm Model="@userProfile" OnValidSubmit="SaveProfile">
+                <DataAnnotationsValidator />
+
+                <!-- Personal Information -->
+                <div class="form-section-card">
+                    <h3 class="section-card-title">Personal Information</h3>
+                    
+                    <div class="form-grid-profile">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            @if (isEditing)
+                            {
+                                <InputText @bind-Value="userProfile.FullName" class="form-input" placeholder="John Doe" />
+                                <ValidationMessage For="@(() => userProfile.FullName)" class="validation-message" />
+                            }
+                            else
+                            {
+                                <div class="form-display-value">@userProfile.FullName</div>
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Username</label>
+                            <div class="form-display-value readonly">@userProfile.Username</div>
+                            <span class="form-hint">Username cannot be changed</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            @if (isEditing)
+                            {
+                                <InputText @bind-Value="userProfile.Email" class="form-input" placeholder="you@example.com" type="email" />
+                                <ValidationMessage For="@(() => userProfile.Email)" class="validation-message" />
+                            }
+                            else
+                            {
+                                <div class="form-display-value">@userProfile.Email</div>
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            @if (isEditing)
+                            {
+                                <InputText @bind-Value="userProfile.PhoneNumber" class="form-input" placeholder="+998 90 123 45 67" />
+                            }
+                            else
+                            {
+                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.PhoneNumber) ? "Not provided" : userProfile.PhoneNumber)</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Body & Style Information -->
+                <div class="form-section-card">
+                    <h3 class="section-card-title">Body & Style Preferences</h3>
+                    
+                    <div class="form-grid-profile">
+                        <div class="form-group">
+                            <label class="form-label">Body Type</label>
+                            @if (isEditing)
+                            {
+                                <select @bind="userProfile.BodyType" class="form-select">
+                                    <option value="">Select body type</option>
+                                    <option value="Athletic">Athletic</option>
+                                    <option value="Slim">Slim</option>
+                                    <option value="Curvy">Curvy</option>
+                                    <option value="PlusSize">Plus Size</option>
+                                    <option value="Petite">Petite</option>
+                                    <option value="Tall">Tall</option>
+                                </select>
+                            }
+                            else
+                            {
+                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.BodyType) ? "Not set" : userProfile.BodyType)</div>
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Gender</label>
+                            @if (isEditing)
+                            {
+                                <select @bind="userProfile.Gender" class="form-select">
+                                    <option value="">Select gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Unisex">Prefer not to say</option>
+                                </select>
+                            }
+                            else
+                            {
+                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.Gender) ? "Not set" : userProfile.Gender)</div>
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Age Range</label>
+                            @if (isEditing)
+                            {
+                                <select @bind="userProfile.AgeRange" class="form-select">
+                                    <option value="">Select age range</option>
+                                    <option value="18-25">18-25</option>
+                                    <option value="26-35">26-35</option>
+                                    <option value="36-45">36-45</option>
+                                    <option value="46-55">46-55</option>
+                                    <option value="56+">56+</option>
+                                </select>
+                            }
+                            else
+                            {
+                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.AgeRange) ? "Not set" : userProfile.AgeRange)</div>
+                            }
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label class="form-label">Favorite Colors</label>
+                            @if (isEditing)
+                            {
+                                <InputText @bind-Value="userProfile.FavoriteColors" class="form-input" placeholder="Blue, Black, White..." />
+                            }
+                            else
+                            {
+                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.FavoriteColors) ? "Not specified" : userProfile.FavoriteColors)</div>
+                            }
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label class="form-label">Style Description</label>
+                            @if (isEditing)
+                            {
+                                <textarea @bind="userProfile.StyleDescription" class="form-textarea" rows="3" placeholder="Describe your personal style..."></textarea>
+                            }
+                            else
+                            {
+                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.StyleDescription) ? "Not specified" : userProfile.StyleDescription)</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Settings -->
+                <div class="form-section-card">
+                    <h3 class="section-card-title">Account Settings</h3>
+                    
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Password</div>
+                                <div class="setting-description">••••••••</div>
+                            </div>
+                            <button type="button" class="btn btn-outline btn-sm" @onclick="ChangePassword">
+                                Change Password
+                            </button>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Email Notifications</div>
+                                <div class="setting-description">Receive style updates and recommendations</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" @bind="userProfile.EmailNotifications" disabled="@(!isEditing)" />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <div class="setting-label">Profile Visibility</div>
+                                <div class="setting-description">Make your style profile public</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" @bind="userProfile.ProfilePublic" disabled="@(!isEditing)" />
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="form-section-card danger-zone">
+                    <h3 class="section-card-title">Danger Zone</h3>
+                    <div class="danger-content">
+                        <div class="danger-info">
+                            <div class="danger-label">Delete Account</div>
+                            <div class="danger-description">Permanently delete your account and all data</div>
+                        </div>
+                        <button type="button" class="btn btn-danger" @onclick="DeleteAccount">
+                            Delete Account
+                        </button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+@if (showPasswordModal)
+{
+    <div class="modal-overlay" @onclick="ClosePasswordModal">
+        <div class="modal-content" @onclick:stopPropagation>
+            <h3>Change Password</h3>
+            <div class="form-group">
+                <label class="form-label">Current Password</label>
+                <input type="password" @bind="currentPassword" class="form-input" placeholder="••••••••" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">New Password</label>
+                <input type="password" @bind="newPassword" class="form-input" placeholder="••••••••" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Confirm New Password</label>
+                <input type="password" @bind="confirmPassword" class="form-input" placeholder="••••••••" />
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" @onclick="ClosePasswordModal">Cancel</button>
+                <button class="btn btn-primary" @onclick="UpdatePassword">Update Password</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private UserProfileModel userProfile = new();
+    private bool isEditing = false;
+    private bool isSaving = false;
+    private bool showPasswordModal = false;
+    
+    private string currentPassword = "";
+    private string newPassword = "";
+    private string confirmPassword = "";
+
+    // Stats - TODO: Get from API
+    private int totalRecommendations = 12;
+    private int savedStyles = 8;
+    private int profileViews = 245;
+
+    protected override void OnInitialized()
+    {
+        // TODO: Load user profile from API
+        userProfile = new UserProfileModel
+        {
+            FullName = "John Doe",
+            Username = "johndoe",
+            Email = "john.doe@example.com",
+            PhoneNumber = "+998 90 123 45 67",
+            BodyType = "Athletic",
+            Gender = "Male",
+            AgeRange = "26-35",
+            FavoriteColors = "Blue, Black, Navy",
+            StyleDescription = "I prefer minimalist, classic styles with clean lines. Comfort is important to me.",
+            EmailNotifications = true,
+            ProfilePublic = false
+        };
+    }
+
+    private string GetUserInitials()
+    {
+        if (string.IsNullOrWhiteSpace(userProfile.FullName))
+            return "U";
+        
+        var names = userProfile.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (names.Length >= 2)
+            return $"{names[0][0]}{names[1][0]}".ToUpper();
+        
+        return names[0][0].ToString().ToUpper();
+    }
+
+    private void EnableEdit()
+    {
+        isEditing = true;
+    }
+
+    private void CancelEdit()
+    {
+        isEditing = false;
+        // TODO: Reload original data
+    }
+
+    private async Task SaveProfile()
+    {
+        isSaving = true;
+
+        try
+        {
+            // TODO: Call API to save profile
+            // await ProfileService.UpdateAsync(userProfile);
+            
+            await Task.Delay(1000);
+            
+            isEditing = false;
+            
+            // Show success message
+            Console.WriteLine("Profile saved successfully!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error saving profile: {ex.Message}");
+        }
+        finally
+        {
+            isSaving = false;
+        }
+    }
+
+    private void ChangePassword()
+    {
+        showPasswordModal = true;
+    }
+
+    private void ClosePasswordModal()
+    {
+        showPasswordModal = false;
+        currentPassword = "";
+        newPassword = "";
+        confirmPassword = "";
+    }
+
+    private async Task UpdatePassword()
+    {
+        // TODO: Validate and update password
+        if (newPassword != confirmPassword)
+        {
+            // Show error
+            return;
+        }
+
+        // TODO: Call API
+        await Task.Delay(500);
+        ClosePasswordModal();
+    }
+
+    private void DeleteAccount()
+    {
+        // TODO: Show confirmation dialog and delete account
+        var confirmed = true; // Show confirmation modal
+        if (confirmed)
+        {
+            // Call API to delete account
+        }
+    }
+
+    public class UserProfileModel
+    {
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Full name is required")]
+        public string FullName { get; set; } = "";
+
+        public string Username { get; set; } = "";
+
+        [System.ComponentModel.DataAnnotations.EmailAddress(ErrorMessage = "Invalid email format")]
+        public string Email { get; set; } = "";
+
+        public string PhoneNumber { get; set; } = "";
+        public string BodyType { get; set; } = "";
+        public string Gender { get; set; } = "";
+        public string AgeRange { get; set; } = "";
+        public string FavoriteColors { get; set; } = "";
+        public string StyleDescription { get; set; } = "";
+        public bool EmailNotifications { get; set; }
+        public bool ProfilePublic { get; set; }
+    }
+}
