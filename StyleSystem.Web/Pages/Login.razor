@@ -1,0 +1,76 @@
+@page "/login"
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager Navigation
+
+<div class="auth-container">
+    <div class="auth-card fade-in">
+        <!-- Logo / Brand -->
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <a href="/" style="text-decoration: none;">
+                <h1 class="logo" style="color: #6366f1; font-size: 2rem;">
+                    Style<span style="color: #ec4899;">System</span>
+                </h1>
+            </a>
+        </div>
+
+        <!-- Title -->
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Sign in to your account to continue</p>
+
+        <!-- Login Form -->
+        <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+            <DataAnnotationsValidator />
+
+            <!-- Username -->
+            <div class="input-group">
+                <label for="username">Username</label>
+                <InputText 
+                    @bind-Value="loginModel.Username" 
+                    id="username" 
+                    class="input-field" 
+                    placeholder="Enter your username"
+                />
+                <ValidationMessage For="@(() => loginModel.Username)" style="color: #ef4444; font-size: 0.875rem; margin-top: 0.25rem;" />
+            </div>
+
+            <!-- Password -->
+            <div class="input-group">
+                <label for="password">Password</label>
+                <InputText 
+                    @bind-Value="loginModel.Password" 
+                    id="password" 
+                    class="input-field" 
+                    placeholder="••••••••"
+                    type="password"
+                />
+                <ValidationMessage For="@(() => loginModel.Password)" style="color: #ef4444; font-size: 0.875rem; margin-top: 0.25rem;" />
+            </div>
+
+            <!-- Error Message -->
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div style="background: #fee2e2; border: 1px solid #fca5a5; color: #dc2626; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1rem; font-size: 0.875rem;">
+                    @errorMessage
+                </div>
+            }
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary btn-large btn-full" disabled="@isLoading">
+                @if (isLoading)
+                {
+                    <span>Signing in...</span>
+                }
+                else
+                {
+                    <span>Sign In</span>
+                }
+            </button>
+        </EditForm>
+
+        <!-- Sign Up Link -->
+        <p class="text-center" style="margin-top: 1.5rem; color: #6b7280; font-size: 0.875rem;">
+            Don't have an account? 
+            <a href="/register" class="auth-link">Sign up</a>
+        </p>
+    </div>
+</div>

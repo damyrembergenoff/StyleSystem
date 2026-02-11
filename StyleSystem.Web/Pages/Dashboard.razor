@@ -1,0 +1,227 @@
+@page "/dashboard"
+@layout AuthenticatedLayout
+
+<div class="dashboard-container">
+    <!-- Welcome Section -->
+    <div class="dashboard-header">
+        <div class="welcome-section">
+            <h1 class="dashboard-title">Welcome back, @userName! 👋</h1>
+            <p class="dashboard-subtitle">Ready to discover your perfect style for today?</p>
+        </div>
+        <div class="header-actions">
+            <a href="/recommendations" class="btn btn-primary btn-large">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+                Get Style Recommendations
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
+                <svg width="24" height="24" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">@totalRecommendations</div>
+                <div class="stat-label">Total Recommendations</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);">
+                <svg width="24" height="24" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">@savedStyles</div>
+                <div class="stat-label">Saved Styles</div>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <svg width="24" height="24" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">@favoriteLooks</div>
+                <div class="stat-label">Favorite Looks</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="dashboard-section">
+        <h2 class="section-title">Quick Actions</h2>
+        <div class="quick-actions-grid">
+            <a href="/recommendations" class="action-card">
+                <div class="action-icon primary">
+                    <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                </div>
+                <h3 class="action-title">New Recommendation</h3>
+                <p class="action-description">Get AI-powered outfit suggestions for any occasion</p>
+            </a>
+
+            <a href="/profile" class="action-card">
+                <div class="action-icon secondary">
+                    <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <h3 class="action-title">Update Profile</h3>
+                <p class="action-description">Edit your style preferences and body type</p>
+            </a>
+
+            <a href="#" class="action-card" @onclick="@(() => showComingSoon = true)" @onclick:preventDefault>
+                <div class="action-icon accent">
+                    <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                </div>
+                <h3 class="action-title">Style Library</h3>
+                <p class="action-description">Browse and save outfit inspirations</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Recommendations -->
+    <div class="dashboard-section">
+        <div class="section-header">
+            <h2 class="section-title">Recent Recommendations</h2>
+            <a href="/history" class="section-link">View All →</a>
+        </div>
+
+        @if (recentRecommendations.Count > 0)
+        {
+            <div class="recommendations-grid">
+                @foreach (var rec in recentRecommendations)
+                {
+                    <div class="recommendation-card">
+                        <div class="recommendation-image">
+                            <img src="@rec.ImageUrl" alt="@rec.Occasion" />
+                            <div class="recommendation-badge">@rec.BodyType</div>
+                        </div>
+                        <div class="recommendation-content">
+                            <div class="recommendation-header">
+                                <h3 class="recommendation-title">@rec.Occasion</h3>
+                                <span class="recommendation-date">@rec.CreatedDate</span>
+                            </div>
+                            <p class="recommendation-description">@rec.Description</p>
+                            <div class="recommendation-tags">
+                                @foreach (var tag in rec.Tags)
+                                {
+                                    <span class="tag">@tag</span>
+                                }
+                            </div>
+                            <div class="recommendation-actions">
+                                <button class="btn-icon">
+                                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                                    </svg>
+                                </button>
+                                <button class="btn-icon">
+                                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <circle cx="18" cy="5" r="3"></circle>
+                                        <circle cx="6" cy="12" r="3"></circle>
+                                        <circle cx="18" cy="19" r="3"></circle>
+                                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg width="64" height="64" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                </div>
+                <h3 class="empty-title">No recommendations yet</h3>
+                <p class="empty-description">Start by creating your first style recommendation!</p>
+                <a href="/recommendations" class="btn btn-primary">Get Started</a>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Coming Soon Modal -->
+@if (showComingSoon)
+{
+    <div class="modal-overlay" @onclick="@(() => showComingSoon = false)">
+        <div class="modal-content" @onclick:stopPropagation>
+            <h3>Coming Soon! 🚀</h3>
+            <p>This feature is currently under development.</p>
+            <button class="btn btn-primary" @onclick="@(() => showComingSoon = false)">Got it</button>
+        </div>
+    </div>
+}
+
+@code {
+    // TODO: Get from authentication service
+    private string userName = "John";
+    
+    // Mock data - TODO: Get from API
+    private int totalRecommendations = 12;
+    private int savedStyles = 8;
+    private int favoriteLooks = 5;
+    
+    private bool showComingSoon = false;
+
+    private List<RecommendationItem> recentRecommendations = new()
+    {
+        new RecommendationItem
+        {
+            Occasion = "Business Meeting",
+            BodyType = "Athletic",
+            Description = "Professional attire with a modern twist for your important presentation",
+            ImageUrl = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=500&fit=crop",
+            CreatedDate = "2 days ago",
+            Tags = new List<string> { "Formal", "Professional", "Navy Blue" }
+        },
+        new RecommendationItem
+        {
+            Occasion = "Casual Weekend",
+            BodyType = "Slim",
+            Description = "Comfortable yet stylish outfit perfect for weekend activities",
+            ImageUrl = "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=500&fit=crop",
+            CreatedDate = "5 days ago",
+            Tags = new List<string> { "Casual", "Comfortable", "Denim" }
+        },
+        new RecommendationItem
+        {
+            Occasion = "Date Night",
+            BodyType = "Athletic",
+            Description = "Elegant evening wear that makes a lasting impression",
+            ImageUrl = "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=500&fit=crop",
+            CreatedDate = "1 week ago",
+            Tags = new List<string> { "Elegant", "Evening", "Black" }
+        }
+    };
+
+    public class RecommendationItem
+    {
+        public string Occasion { get; set; } = "";
+        public string BodyType { get; set; } = "";
+        public string Description { get; set; } = "";
+        public string ImageUrl { get; set; } = "";
+        public string CreatedDate { get; set; } = "";
+        public List<string> Tags { get; set; } = new();
+    }
+}

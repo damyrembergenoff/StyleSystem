@@ -1,0 +1,270 @@
+@page "/results"
+@page "/results/{id}"
+@layout AuthenticatedLayout
+
+<div class="results-container">
+    <!-- Header -->
+    <div class="results-header">
+        <button class="back-button" @onclick="GoBack">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Back
+        </button>
+        <div class="header-info">
+            <h1 class="results-title">Your Style Recommendations ✨</h1>
+            <p class="results-subtitle">Based on: <span class="occasion-tag">@occasionName</span></p>
+        </div>
+        <div class="header-actions">
+            <button class="btn-icon-action" title="Save">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                </svg>
+            </button>
+            <button class="btn-icon-action" title="Share">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+            </button>
+            <button class="btn btn-primary" @onclick="CreateNew">
+                New Recommendation
+            </button>
+        </div>
+    </div>
+
+    <!-- AI Advice Section -->
+    <div class="advice-section">
+        <div class="advice-header">
+            <div class="ai-badge">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+                AI Stylist Advice
+            </div>
+        </div>
+        <div class="advice-content">
+            <p class="advice-text">@aiAdvice</p>
+        </div>
+        
+        <!-- Style Tips -->
+        <div class="style-tips">
+            <h3 class="tips-heading">💡 Styling Tips:</h3>
+            <ul class="tips-list-compact">
+                @foreach (var tip in stylingTips)
+                {
+                    <li>@tip</li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <!-- Outfit Gallery -->
+    <div class="outfit-section">
+        <h2 class="section-heading">Recommended Outfits</h2>
+        <p class="section-description">Here are @outfitImages.Count curated outfit@(outfitImages.Count > 1 ? "s" : "") based on your preferences</p>
+        
+        <div class="outfit-gallery">
+            @foreach (var (outfit, index) in outfitImages.Select((o, i) => (o, i)))
+            {
+                <div class="outfit-card @(selectedOutfit == index ? "selected" : "")" @onclick="@(() => SelectOutfit(index))">
+                    <div class="outfit-image-wrapper">
+                        <img src="@outfit.ImageUrl" alt="@outfit.Title" class="outfit-image" />
+                        @if (selectedOutfit == index)
+                        {
+                            <div class="selected-badge">
+                                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                            </div>
+                        }
+                        <div class="outfit-number">Option @(index + 1)</div>
+                    </div>
+                    <div class="outfit-info">
+                        <h3 class="outfit-title">@outfit.Title</h3>
+                        <p class="outfit-description">@outfit.Description</p>
+                        
+                        <!-- Outfit Details -->
+                        <div class="outfit-details">
+                            @if (!string.IsNullOrEmpty(outfit.TopWear))
+                            {
+                                <div class="detail-item">
+                                    <span class="detail-label">Top:</span>
+                                    <span class="detail-value">@outfit.TopWear</span>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(outfit.BottomWear))
+                            {
+                                <div class="detail-item">
+                                    <span class="detail-label">Bottom:</span>
+                                    <span class="detail-value">@outfit.BottomWear</span>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(outfit.Footwear))
+                            {
+                                <div class="detail-item">
+                                    <span class="detail-label">Shoes:</span>
+                                    <span class="detail-value">@outfit.Footwear</span>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(outfit.Accessories))
+                            {
+                                <div class="detail-item">
+                                    <span class="detail-label">Accessories:</span>
+                                    <span class="detail-value">@outfit.Accessories</span>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Color Palette -->
+                        @if (outfit.Colors.Any())
+                        {
+                            <div class="color-palette">
+                                <span class="palette-label">Colors:</span>
+                                <div class="palette-colors">
+                                    @foreach (var color in outfit.Colors)
+                                    {
+                                        <div class="color-swatch" style="background: @color;" title="@color"></div>
+                                    }
+                                </div>
+                            </div>
+                        }
+
+                        <!-- Action Buttons -->
+                        <div class="outfit-actions">
+                            <button class="btn-action-small">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                                Save
+                            </button>
+                            <button class="btn-action-small">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                                    <polyline points="16 6 12 2 8 6"></polyline>
+                                    <line x1="12" y1="2" x2="12" y2="15"></line>
+                                </svg>
+                                Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Additional Actions -->
+    <div class="bottom-actions">
+        <button class="btn btn-outline btn-large" @onclick="RegenerateRecommendations">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+            Regenerate
+        </button>
+        <button class="btn btn-primary btn-large" @onclick="ApplyToWardrobe">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Add to My Wardrobe
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    private int selectedOutfit = 0;
+    
+    // Mock data - TODO: Get from API based on Id
+    private string occasionName = "Business Meeting";
+    private string aiAdvice = "For your business meeting, I recommend a sophisticated yet modern approach. The key is to balance professionalism with personal style. Navy and charcoal tones work exceptionally well in corporate settings, conveying confidence and authority. Consider a well-fitted blazer as your foundation piece - it instantly elevates any outfit. Pair it with tailored trousers for a polished look. Don't forget the power of good footwear; classic leather shoes in brown or black complete the ensemble. Minimal accessories keep the focus on you and your ideas during the meeting.";
+    
+    private List<string> stylingTips = new()
+    {
+        "Ensure your blazer fits properly at the shoulders - this is crucial for a professional appearance",
+        "Match your belt with your shoes for a cohesive look",
+        "Keep accessories minimal and classic - a quality watch is perfect",
+        "Make sure clothes are freshly pressed for maximum impact"
+    };
+
+    private List<OutfitRecommendation> outfitImages = new()
+    {
+        new OutfitRecommendation
+        {
+            Title = "Classic Navy Suit",
+            Description = "A timeless navy suit paired with crisp white shirt for maximum professionalism",
+            ImageUrl = "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=800&fit=crop",
+            TopWear = "Navy blazer + White dress shirt",
+            BottomWear = "Matching navy trousers",
+            Footwear = "Black leather oxford shoes",
+            Accessories = "Silver watch, black leather belt",
+            Colors = new List<string> { "#1e3a8a", "#ffffff", "#000000" }
+        },
+        new OutfitRecommendation
+        {
+            Title = "Modern Charcoal Look",
+            Description = "Contemporary charcoal ensemble with subtle pattern details",
+            ImageUrl = "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?w=600&h=800&fit=crop",
+            TopWear = "Charcoal blazer + Light blue shirt",
+            BottomWear = "Gray dress pants",
+            Footwear = "Brown leather brogues",
+            Accessories = "Blue pocket square, brown belt",
+            Colors = new List<string> { "#4b5563", "#93c5fd", "#78350f" }
+        },
+        new OutfitRecommendation
+        {
+            Title = "Smart Business Casual",
+            Description = "Polished yet approachable business casual combination",
+            ImageUrl = "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&h=800&fit=crop",
+            TopWear = "Light gray blazer + Navy polo",
+            BottomWear = "Khaki chinos",
+            Footwear = "Tan leather loafers",
+            Accessories = "Minimalist watch, leather bracelet",
+            Colors = new List<string> { "#d1d5db", "#1e40af", "#d97706" }
+        }
+    };
+
+    private void SelectOutfit(int index)
+    {
+        selectedOutfit = index;
+    }
+
+    private void GoBack()
+    {
+        // TODO: Navigation.NavigateTo("/recommendations");
+    }
+
+    private void CreateNew()
+    {
+        // TODO: Navigation.NavigateTo("/recommendations");
+    }
+
+    private void RegenerateRecommendations()
+    {
+        // TODO: Call API to regenerate with same parameters
+        // Show loading state
+    }
+
+    private void ApplyToWardrobe()
+    {
+        // TODO: Save selected outfit to user's wardrobe
+        // Show success message
+    }
+
+    public class OutfitRecommendation
+    {
+        public string Title { get; set; } = "";
+        public string Description { get; set; } = "";
+        public string ImageUrl { get; set; } = "";
+        public string TopWear { get; set; } = "";
+        public string BottomWear { get; set; } = "";
+        public string Footwear { get; set; } = "";
+        public string Accessories { get; set; } = "";
+        public List<string> Colors { get; set; } = new();
+    }
+}

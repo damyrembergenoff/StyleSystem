@@ -1,0 +1,9 @@
+@url = http://localhost:5000
+
+POST {{url}}/api/fashion/recommend
+Content-Type: application/json
+
+{
+    "prompt": "Menga kechki bazim uchun classic obraz aytib bering."
+}
+###

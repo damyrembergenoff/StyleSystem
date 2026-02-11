@@ -1,0 +1,365 @@
+@page "/recommendations"
+@layout AuthenticatedLayout
+
+<div class="recommendations-container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Get Style Recommendations ✨</h1>
+            <p class="page-subtitle">Tell us about yourself and the occasion, and our AI will create personalized outfit recommendations for you.</p>
+        </div>
+    </div>
+
+    <!-- Main Form -->
+    <div class="form-container">
+        <EditForm Model="@recommendationForm" OnValidSubmit="HandleSubmit">
+            <DataAnnotationsValidator />
+
+            <!-- Step Indicator -->
+            <div class="steps-indicator">
+                <div class="step @(currentStep >= 1 ? "active" : "") @(currentStep > 1 ? "completed" : "")">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Body Info</div>
+                </div>
+                <div class="step-divider"></div>
+                <div class="step @(currentStep >= 2 ? "active" : "") @(currentStep > 2 ? "completed" : "")">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Occasion</div>
+                </div>
+                <div class="step-divider"></div>
+                <div class="step @(currentStep >= 3 ? "active" : "")">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Preferences</div>
+                </div>
+            </div>
+
+            <!-- Step 1: Body Information -->
+            @if (currentStep == 1)
+            {
+                <div class="form-section fade-in">
+                    <h2 class="form-section-title">Tell us about your body type</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="bodyType" class="form-label">Body Type *</label>
+                            <select @bind="recommendationForm.BodyType" id="bodyType" class="form-select">
+                                <option value="">Select your body type</option>
+                                <option value="Athletic">Athletic - Muscular build, broad shoulders</option>
+                                <option value="Slim">Slim - Lean and slender frame</option>
+                                <option value="Curvy">Curvy - Defined waist with fuller hips</option>
+                                <option value="PlusSize">Plus Size - Fuller figure</option>
+                                <option value="Petite">Petite - Smaller frame, under 5'4"</option>
+                                <option value="Tall">Tall - Over 6'0"</option>
+                            </select>
+                            <ValidationMessage For="@(() => recommendationForm.BodyType)" class="validation-message" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="gender" class="form-label">Gender *</label>
+                            <select @bind="recommendationForm.Gender" id="gender" class="form-select">
+                                <option value="">Select gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Unisex">Prefer not to say / Unisex</option>
+                            </select>
+                            <ValidationMessage For="@(() => recommendationForm.Gender)" class="validation-message" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="age" class="form-label">Age Range</label>
+                            <select @bind="recommendationForm.AgeRange" id="age" class="form-select">
+                                <option value="">Select age range</option>
+                                <option value="18-25">18-25</option>
+                                <option value="26-35">26-35</option>
+                                <option value="36-45">36-45</option>
+                                <option value="46-55">46-55</option>
+                                <option value="56+">56+</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary btn-large" @onclick="NextStep">
+                            Next Step →
+                        </button>
+                    </div>
+                </div>
+            }
+
+            <!-- Step 2: Occasion -->
+            @if (currentStep == 2)
+            {
+                <div class="form-section fade-in">
+                    <h2 class="form-section-title">Where are you going?</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="occasion" class="form-label">Occasion *</label>
+                            <input 
+                                type="text" 
+                                @bind="recommendationForm.Occasion" 
+                                id="occasion" 
+                                class="form-input" 
+                                placeholder="e.g., Wedding, Job Interview, Casual Date, Gym..."
+                            />
+                            <ValidationMessage For="@(() => recommendationForm.Occasion)" class="validation-message" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="season" class="form-label">Season</label>
+                            <select @bind="recommendationForm.Season" id="season" class="form-select">
+                                <option value="">Select season</option>
+                                <option value="Spring">Spring</option>
+                                <option value="Summer">Summer</option>
+                                <option value="Fall">Fall</option>
+                                <option value="Winter">Winter</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="weather" class="form-label">Weather</label>
+                            <select @bind="recommendationForm.Weather" id="weather" class="form-select">
+                                <option value="">Select weather</option>
+                                <option value="Hot">Hot (25°C+)</option>
+                                <option value="Warm">Warm (18-25°C)</option>
+                                <option value="Cool">Cool (10-18°C)</option>
+                                <option value="Cold">Cold (below 10°C)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="formality" class="form-label">Formality Level *</label>
+                            <select @bind="recommendationForm.FormalityLevel" id="formality" class="form-select">
+                                <option value="">Select formality</option>
+                                <option value="Casual">Casual - Everyday wear</option>
+                                <option value="SmartCasual">Smart Casual - Neat but relaxed</option>
+                                <option value="Business">Business - Professional attire</option>
+                                <option value="Formal">Formal - Black tie, evening wear</option>
+                            </select>
+                            <ValidationMessage For="@(() => recommendationForm.FormalityLevel)" class="validation-message" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="timeOfDay" class="form-label">Time of Day</label>
+                            <select @bind="recommendationForm.TimeOfDay" id="timeOfDay" class="form-select">
+                                <option value="">Select time</option>
+                                <option value="Morning">Morning</option>
+                                <option value="Afternoon">Afternoon</option>
+                                <option value="Evening">Evening</option>
+                                <option value="Night">Night</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" @onclick="PreviousStep">
+                            ← Previous
+                        </button>
+                        <button type="button" class="btn btn-primary btn-large" @onclick="NextStep">
+                            Next Step →
+                        </button>
+                    </div>
+                </div>
+            }
+
+            <!-- Step 3: Style Preferences -->
+            @if (currentStep == 3)
+            {
+                <div class="form-section fade-in">
+                    <h2 class="form-section-title">Style preferences (Optional)</h2>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label for="colorPreferences" class="form-label">Favorite Colors</label>
+                            <input 
+                                type="text" 
+                                @bind="recommendationForm.ColorPreferences" 
+                                id="colorPreferences" 
+                                class="form-input" 
+                                placeholder="e.g., Blue, Black, Pastels..."
+                            />
+                            <span class="form-hint">Colors you prefer or want to incorporate</span>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="stylePreferences" class="form-label">Style Description</label>
+                            <textarea 
+                                @bind="recommendationForm.StylePreferences" 
+                                id="stylePreferences" 
+                                class="form-textarea" 
+                                rows="4"
+                                placeholder="Describe your style... (e.g., I love minimalist designs, prefer comfortable fabrics, enjoy bold patterns...)"
+                            ></textarea>
+                            <span class="form-hint">Help us understand your personal style</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="budget" class="form-label">Budget Range</label>
+                            <select @bind="recommendationForm.BudgetRange" id="budget" class="form-select">
+                                <option value="">Select budget</option>
+                                <option value="Budget">Budget Friendly ($)</option>
+                                <option value="Moderate">Moderate ($$)</option>
+                                <option value="Premium">Premium ($$$)</option>
+                                <option value="Luxury">Luxury ($$$$)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Additional Preferences</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" @bind="recommendationForm.SustainableFashion" />
+                                    <span>Sustainable/Eco-friendly fashion</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" @bind="recommendationForm.ComfortPriority" />
+                                    <span>Comfort is top priority</span>
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" @bind="recommendationForm.TrendyStyle" />
+                                    <span>Latest fashion trends</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" @onclick="PreviousStep">
+                            ← Previous
+                        </button>
+                        <button type="submit" class="btn btn-generate btn-large" disabled="@isLoading">
+                            @if (isLoading)
+                            {
+                                <span>Generating...</span>
+                                <div class="spinner"></div>
+                            }
+                            else
+                            {
+                                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                                </svg>
+                                <span>Generate Recommendations</span>
+                            }
+                        </button>
+                    </div>
+                </div>
+            }
+        </EditForm>
+
+        <!-- Tips Section -->
+        <div class="tips-card">
+            <h3 class="tips-title">💡 Tips for best results</h3>
+            <ul class="tips-list">
+                <li>Be specific about the occasion - it helps us understand the context better</li>
+                <li>Mention any specific requirements (e.g., need pockets, prefer certain fabrics)</li>
+                <li>Don't worry about being too detailed - more information means better recommendations!</li>
+                <li>You can always regenerate with different preferences</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@code {
+    private RecommendationFormModel recommendationForm = new();
+    private int currentStep = 1;
+    private bool isLoading = false;
+
+    private void NextStep()
+    {
+        // Validate current step before moving
+        if (currentStep == 1)
+        {
+            if (string.IsNullOrWhiteSpace(recommendationForm.BodyType) || 
+                string.IsNullOrWhiteSpace(recommendationForm.Gender))
+            {
+                return; // Show validation
+            }
+        }
+        else if (currentStep == 2)
+        {
+            if (string.IsNullOrWhiteSpace(recommendationForm.Occasion) || 
+                string.IsNullOrWhiteSpace(recommendationForm.FormalityLevel))
+            {
+                return; // Show validation
+            }
+        }
+
+        if (currentStep < 3)
+        {
+            currentStep++;
+            StateHasChanged();
+        }
+    }
+
+    private void PreviousStep()
+    {
+        if (currentStep > 1)
+        {
+            currentStep--;
+            StateHasChanged();
+        }
+    }
+
+    private async Task HandleSubmit()
+    {
+        isLoading = true;
+
+        try
+        {
+            // TODO: Call API to generate recommendations
+            // var result = await RecommendationService.GenerateAsync(recommendationForm);
+            
+            // Simulate API call
+            await Task.Delay(2000);
+
+            // TODO: Navigate to results page with recommendations
+            // Navigation.NavigateTo($"/results/{result.Id}");
+            
+            // For now, just show success
+            Console.WriteLine("Form submitted!");
+            Console.WriteLine($"Body Type: {recommendationForm.BodyType}");
+            Console.WriteLine($"Occasion: {recommendationForm.Occasion}");
+            Console.WriteLine($"Style: {recommendationForm.StylePreferences}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    public class RecommendationFormModel
+    {
+        // Step 1
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Please select your body type")]
+        public string BodyType { get; set; } = "";
+
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Please select your gender")]
+        public string Gender { get; set; } = "";
+
+        public string AgeRange { get; set; } = "";
+
+        // Step 2
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Please describe the occasion")]
+        public string Occasion { get; set; } = "";
+
+        public string Season { get; set; } = "";
+        public string Weather { get; set; } = "";
+
+        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Please select formality level")]
+        public string FormalityLevel { get; set; } = "";
+
+        public string TimeOfDay { get; set; } = "";
+
+        // Step 3
+        public string ColorPreferences { get; set; } = "";
+        public string StylePreferences { get; set; } = "";
+        public string BudgetRange { get; set; } = "";
+        public bool SustainableFashion { get; set; }
+        public bool ComfortPriority { get; set; }
+        public bool TrendyStyle { get; set; }
+    }
+}
