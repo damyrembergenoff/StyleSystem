@@ -33,9 +33,9 @@ public class AuthenticationStateService(
         get
         {
             var userIdClaim = user?
-            .Claims
-            .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
-            ?.Value;
+                .Claims
+                .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)
+                ?.Value;
 
         if (Guid.TryParse(userIdClaim, out var userId))
             return userId;

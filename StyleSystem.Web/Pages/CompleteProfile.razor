@@ -1,0 +1,213 @@
+@page "/complete-profile"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+<div class="complete-profile-container">
+    <div class="profile-card fade-in">
+        <!-- Header -->
+        <div class="profile-header">
+            <h1 class="profile-title">Complete Your Profile</h1>
+            <p class="profile-subtitle">Help us personalize your style recommendations</p>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: @GetProgressPercentage()%"></div>
+            </div>
+        </div>
+
+        <EditForm Model="@profileModel" OnValidSubmit="HandleSubmit">
+            <DataAnnotationsValidator />
+
+            <!-- Step 1: Basic Info -->
+            @if (currentStep == 1)
+            {
+                <div class="form-section">
+                    <h3 class="section-title">Personal Information</h3>
+                    
+                    <!-- Full Name -->
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <InputText @bind-Value="profileModel.FullName" 
+                                   class="input-field" 
+                                   placeholder="Enter your full name" />
+                        <ValidationMessage For="@(() => profileModel.FullName)" />
+                    </div>
+
+                    <!-- Height -->
+                    <div class="input-group">
+                        <label>Height (cm)</label>
+                        <InputNumber @bind-Value="profileModel.Height" 
+                                     class="input-field" 
+                                     placeholder="e.g., 175" />
+                        <ValidationMessage For="@(() => profileModel.Height)" />
+                    </div>
+
+                    <!-- Weight -->
+                    <div class="input-group">
+                        <label>Weight (kg)</label>
+                        <InputNumber @bind-Value="profileModel.Weight" 
+                                     class="input-field" 
+                                     placeholder="e.g., 70" />
+                        <ValidationMessage For="@(() => profileModel.Weight)" />
+                    </div>
+
+                    <!-- Age -->
+                    <div class="input-group">
+                        <label>Age</label>
+                        <InputNumber @bind-Value="profileModel.Age" 
+                                     class="input-field" 
+                                     placeholder="e.g., 30" />
+                        <ValidationMessage For="@(() => profileModel.Weight)" />
+                    </div>
+                </div>
+            }
+
+            <!-- Step 2: Gender Selection -->
+            @if (currentStep == 2)
+            {
+                <div class="form-section">
+                    <h3 class="section-title">Select Your Gender</h3>
+                    
+                    <div class="gender-selection">
+                        <div class="gender-card @(profileModel.Gender == "Male" ? "selected" : "")" 
+                             @onclick="SelectMaleGender">
+                        <div class="gender-icon">♂</div>
+                        <div class="gender-label">Male</div>
+                        </div>
+                        
+                        <div class="gender-card @(profileModel.Gender == "Female" ? "selected" : "")" 
+                             @onclick="SelectFemaleGender">
+                            <div class="gender-icon">♀</div>
+                            <div class="gender-label">Female</div>
+                        </div>
+                    </div>
+
+                    @if (string.IsNullOrEmpty(profileModel.Gender))
+                    {
+                        <p class="error-text">Please select your gender</p>
+                    }
+                </div>
+            }
+
+            <!-- Step 3: Body Type Selection -->
+            @if (currentStep == 3)
+            {
+                <div class="form-section">
+                    <h3 class="section-title">Select Your Body Type</h3>
+                    <p class="section-description">Choose the body type that best matches your physique</p>
+
+                    <!-- Bitta umumiy rasm -->
+                    <div class="body-type-reference-image">
+                        @if (profileModel.Gender == "Male")
+                        {
+                            <img src="/images/male-body-types.png" alt="Male Body Types" class="body-types-image"/>
+                        }
+                        else if (profileModel.Gender == "Female")
+                        {
+                            <img src="/images/female-body-types.png" alt="Female Body Types" class="body-types-image"/>
+                        }
+                    </div>
+
+                    <!-- Body type kartochkalari - rasmsiz -->
+                    <div class="body-type-grid">
+                        @if (profileModel.Gender == "Male")
+                        {
+                            @foreach (var bodyType in maleBodyTypes)
+                            {
+                                <div class="body-type-card @(profileModel.BodyType == bodyType.Value ? "selected" : "")"
+                                    @onclick="() => SelectBodyType(bodyType.Value)">
+                                    <div class="body-type-name">@bodyType.Name</div>
+                                    <div class="body-type-description">@bodyType.Description</div>
+                                </div>
+                            }
+                        }
+                        else if (profileModel.Gender == "Female")
+                        {
+                            @foreach (var bodyType in femaleBodyTypes)
+                            {
+                                <div class="body-type-card @(profileModel.BodyType == bodyType.Value ? "selected" : "")"
+                                    @onclick="() => SelectBodyType(bodyType.Value)">
+                                    <div class="body-type-name">@bodyType.Name</div>
+                                    <div class="body-type-description">@bodyType.Description</div>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    @if (string.IsNullOrEmpty(profileModel.BodyType))
+                    {
+                        <p class="error-text">Please select your body type</p>
+                    }
+                </div>
+            }
+
+            <!-- Step 4: Skin Tone -->
+            @if (currentStep == 4)
+            {
+                <div class="form-section">
+                    <h3 class="section-title">Select Your Skin Tone</h3>
+                    <p class="section-description">This helps us recommend colors that complement you</p>
+                    
+                    <div class="skin-tone-grid">
+                        @foreach (var tone in skinTones)
+                        {
+                            <div class="skin-tone-card @(profileModel.SkinTone == tone.Value ? "selected" : "")" 
+                                 @onclick="() => SelectSkinTone(tone.Value)">
+                                <div class="skin-tone-color" style="background-color: @tone.Color"></div>
+                                <div class="skin-tone-name">@tone.Name</div>
+                            </div>
+                        }
+                    </div>
+
+                    @if (string.IsNullOrEmpty(profileModel.SkinTone))
+                    {
+                        <p class="error-text">Please select your skin tone</p>
+                    }
+                </div>
+            }
+
+            <!-- Error/Success Messages -->
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-error">
+                    @errorMessage
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <div class="alert alert-success">
+                    @successMessage
+                </div>
+            }
+
+            <!-- Navigation Buttons -->
+            <div class="button-group">
+                @if (currentStep > 1)
+                {
+                    <button type="button" class="btn btn-secondary" @onclick="PreviousStep">
+                        ← Previous
+                    </button>
+                }
+
+                @if (currentStep < 4)
+                {
+                    <button type="button" class="btn btn-primary" @onclick="NextStep">
+                        Next →
+                    </button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-primary" disabled="@isLoading">
+                        @if (isLoading)
+                        {
+                            <span>Saving...</span>
+                        }
+                        else
+                        {
+                            <span>Complete Profile</span>
+                        }
+                    </button>
+                }
+            </div>
+        </EditForm>
+    </div>
+</div>

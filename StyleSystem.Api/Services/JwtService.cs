@@ -14,8 +14,9 @@ public class JwtService(IConfiguration configuration)
 
         var claims = new Claim[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.FullName!),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim("FullName", user.FullName!),
+            new Claim("username", user.Username!),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 

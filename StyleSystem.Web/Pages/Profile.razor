@@ -1,4 +1,8 @@
 @page "/profile"
+@using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Authorization
+@using StyleSystem.Web.Auth
+@attribute [Authorize]
 @layout AuthenticatedLayout
 
 <div class="profile-container">
@@ -39,6 +43,13 @@
 
     <!-- Profile Content -->
     <div class="profile-content">
+        @if (!string.IsNullOrEmpty(SuccessMessage))
+        {
+            <div class="alert alert-success">
+                @SuccessMessage
+                <button class="alert-close" @onclick="ClearSuccessMessage">&times;</button>
+            </div>
+        }
         <!-- Left Column: Avatar & Stats -->
         <div class="profile-sidebar">
             <!-- Avatar Section -->
@@ -58,45 +69,7 @@
                     }
                 </div>
                 <h2 class="user-display-name">@userProfile.FullName</h2>
-                <p class="user-username">@@@userProfile.Username</p>
-            </div>
-
-            <!-- Stats Cards -->
-            <div class="profile-stats">
-                <div class="stat-item">
-                    <div class="stat-icon-small">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="stat-number">@totalRecommendations</div>
-                        <div class="stat-text">Recommendations</div>
-                    </div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon-small">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="stat-number">@savedStyles</div>
-                        <div class="stat-text">Saved Styles</div>
-                    </div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon-small">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                    </div>
-                    <div>
-                        <div class="stat-number">@profileViews</div>
-                        <div class="stat-text">Profile Views</div>
-                    </div>
-                </div>
+                <p class="user-username">@Username</p>
             </div>
         </div>
 
@@ -125,33 +98,8 @@
 
                         <div class="form-group">
                             <label class="form-label">Username</label>
-                            <div class="form-display-value readonly">@userProfile.Username</div>
+                            <div class="form-display-value readonly">@Username</div>
                             <span class="form-hint">Username cannot be changed</span>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Email</label>
-                            @if (isEditing)
-                            {
-                                <InputText @bind-Value="userProfile.Email" class="form-input" placeholder="you@example.com" type="email" />
-                                <ValidationMessage For="@(() => userProfile.Email)" class="validation-message" />
-                            }
-                            else
-                            {
-                                <div class="form-display-value">@userProfile.Email</div>
-                            }
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Phone Number</label>
-                            @if (isEditing)
-                            {
-                                <InputText @bind-Value="userProfile.PhoneNumber" class="form-input" placeholder="+998 90 123 45 67" />
-                            }
-                            else
-                            {
-                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.PhoneNumber) ? "Not provided" : userProfile.PhoneNumber)</div>
-                            }
                         </div>
                     </div>
                 </div>
@@ -162,34 +110,13 @@
                     
                     <div class="form-grid-profile">
                         <div class="form-group">
-                            <label class="form-label">Body Type</label>
-                            @if (isEditing)
-                            {
-                                <select @bind="userProfile.BodyType" class="form-select">
-                                    <option value="">Select body type</option>
-                                    <option value="Athletic">Athletic</option>
-                                    <option value="Slim">Slim</option>
-                                    <option value="Curvy">Curvy</option>
-                                    <option value="PlusSize">Plus Size</option>
-                                    <option value="Petite">Petite</option>
-                                    <option value="Tall">Tall</option>
-                                </select>
-                            }
-                            else
-                            {
-                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.BodyType) ? "Not set" : userProfile.BodyType)</div>
-                            }
-                        </div>
-
-                        <div class="form-group">
                             <label class="form-label">Gender</label>
                             @if (isEditing)
                             {
-                                <select @bind="userProfile.Gender" class="form-select">
+                                <select @bind="userProfile.Gender" @onchanged="OnGenderChanged" class="form-select">
                                     <option value="">Select gender</option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
-                                    <option value="Unisex">Prefer not to say</option>
                                 </select>
                             }
                             else
@@ -199,45 +126,53 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Age Range</label>
+                            <label class="form-label">Body Type</label>
                             @if (isEditing)
                             {
-                                <select @bind="userProfile.AgeRange" class="form-select">
-                                    <option value="">Select age range</option>
-                                    <option value="18-25">18-25</option>
-                                    <option value="26-35">26-35</option>
-                                    <option value="36-45">36-45</option>
-                                    <option value="46-55">46-55</option>
-                                    <option value="56+">56+</option>
+                                <select @bind="userProfile.BodyType" class="form-select">
+                                    <option value="">Select body type</option>
+                                    @foreach (var option in availableBodyTypes)
+                                    {
+                                        <option value="@option">@option</option>
+                                    }
                                 </select>
                             }
                             else
                             {
-                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.AgeRange) ? "Not set" : userProfile.AgeRange)</div>
+                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.BodyType) ? "Not set" : userProfile.BodyType)</div>
                             }
                         </div>
 
-                        <div class="form-group full-width">
-                            <label class="form-label">Favorite Colors</label>
+                        <div class="form-group">
+                            <label class="form-label">Age</label>
                             @if (isEditing)
                             {
-                                <InputText @bind-Value="userProfile.FavoriteColors" class="form-input" placeholder="Blue, Black, White..." />
+                                <InputNumber @bind-Value="userProfile.Age" class="form-input" placeholder="25" />
+                                <ValidationMessage For="@(() => userProfile.Age)" class="validation-message" />
                             }
                             else
                             {
-                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.FavoriteColors) ? "Not specified" : userProfile.FavoriteColors)</div>
+                                <div class="form-display-value">@(userProfile.Age?.ToString() ?? "Not set")</div>
                             }
                         </div>
 
-                        <div class="form-group full-width">
-                            <label class="form-label">Style Description</label>
+                        <div class="form-group">
+                            <label class="form-label">Skin Tone</label>
                             @if (isEditing)
                             {
-                                <textarea @bind="userProfile.StyleDescription" class="form-textarea" rows="3" placeholder="Describe your personal style..."></textarea>
+                                <select @bind="userProfile.SkinTone" class="form-select">
+                                    <option value="">Select skin tone</option>
+                                    <option value="Fair">Fair</option>
+                                    <option value="Light">Light</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Olive">Olive</option>
+                                    <option value="Tan">Tan</option>
+                                    <option value="Dark">Dark</option>
+                                </select>
                             }
                             else
                             {
-                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.StyleDescription) ? "Not specified" : userProfile.StyleDescription)</div>
+                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.SkinTone) ? "Not set" : userProfile.SkinTone)</div>
                             }
                         </div>
                     </div>
@@ -256,28 +191,6 @@
                             <button type="button" class="btn btn-outline btn-sm" @onclick="ChangePassword">
                                 Change Password
                             </button>
-                        </div>
-
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <div class="setting-label">Email Notifications</div>
-                                <div class="setting-description">Receive style updates and recommendations</div>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" @bind="userProfile.EmailNotifications" disabled="@(!isEditing)" />
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <div class="setting-label">Profile Visibility</div>
-                                <div class="setting-description">Make your style profile public</div>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" @bind="userProfile.ProfilePublic" disabled="@(!isEditing)" />
-                                <span class="toggle-slider"></span>
-                            </label>
                         </div>
                     </div>
                 </div>
@@ -306,6 +219,15 @@
     <div class="modal-overlay" @onclick="ClosePasswordModal">
         <div class="modal-content" @onclick:stopPropagation>
             <h3>Change Password</h3>
+            
+            @if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                <div class="alert alert-danger">
+                    @ErrorMessage
+                    <button class="alert-close" @onclick="() => ErrorMessage = string.Empty">&times;</button>
+                </div>
+            }
+
             <div class="form-group">
                 <label class="form-label">Current Password</label>
                 <input type="password" @bind="currentPassword" class="form-input" placeholder="••••••••" />
@@ -327,7 +249,13 @@
 }
 
 @code {
-    private UserProfileModel userProfile = new();
+    [Inject] public required IHttpClientFactory HttpClientFactory { get; set; }
+    [Inject] public required NavigationManager NavigationManager { get; set; }
+    [Inject] public required IJSRuntime JSRuntime { get; set; }
+    [Inject] public required ILocalStorageService localStorageService { get; set; }
+    [Inject] public required AuthenticationStateProvider authenticationStateProvider { get; set; }
+    
+    private StyleSystem.Web.Dtos.CompleteProfile.ProfileModel userProfile = new();
     private bool isEditing = false;
     private bool isSaving = false;
     private bool showPasswordModal = false;
@@ -335,29 +263,57 @@
     private string currentPassword = "";
     private string newPassword = "";
     private string confirmPassword = "";
+    private string Username = "";
+    private string SuccessMessage = "";
+    private string ErrorMessage = "";
 
-    // Stats - TODO: Get from API
-    private int totalRecommendations = 12;
-    private int savedStyles = 8;
-    private int profileViews = 245;
+    private List<string> availableBodyTypes = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        // TODO: Load user profile from API
-        userProfile = new UserProfileModel
+        await LoadProfileAsync();
+        UpdateAvailableBodyTypes();
+    }
+
+    private async Task LoadProfileAsync()
+    {
+        try
         {
-            FullName = "John Doe",
-            Username = "johndoe",
-            Email = "john.doe@example.com",
-            PhoneNumber = "+998 90 123 45 67",
-            BodyType = "Athletic",
-            Gender = "Male",
-            AgeRange = "26-35",
-            FavoriteColors = "Blue, Black, Navy",
-            StyleDescription = "I prefer minimalist, classic styles with clean lines. Comfort is important to me.",
-            EmailNotifications = true,
-            ProfilePublic = false
+            var privateHttp = HttpClientFactory.CreateClient("Private");
+            var response = await privateHttp.GetFromJsonAsync<StyleSystem.Shared.Dtos.UserDto>("api/user/profile");
+            if (response != null)
+            {
+                userProfile.FullName = response.FullName ?? "";
+                Username = response.Username ?? "";
+                userProfile.Age = response.Age;
+                userProfile.Height = response.Height;
+                userProfile.Weight = response.Weight;
+                userProfile.Gender = response.Gender?.ToString() ?? "";
+                userProfile.BodyType = response.Gender == StyleSystem.Shared.Dtos.EGender.Male 
+                    ? response.MaleBodyType?.ToString() ?? "" 
+                    : response.FemaleBodyType?.ToString() ?? "";
+                userProfile.SkinTone = response.SkinTone?.ToString() ?? "";
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading profile: {ex.Message}");
+        }
+    }
+
+    private void UpdateAvailableBodyTypes()
+    {
+        availableBodyTypes = userProfile.Gender switch
+        {
+            "Male" => new List<string> { "Rectangle", "Triangle", "InvertedTriangle", "Trapezoid", "Oval" },
+            "Female" => new List<string> { "Hourglass", "Pear", "Apple", "Rectangle", "InvertedTriangle", "Diamond" },
+            _ => new List<string>()
         };
+    }
+
+    private void ClearSuccessMessage()
+    {
+        SuccessMessage = "";
     }
 
     private string GetUserInitials()
@@ -374,13 +330,16 @@
 
     private void EnableEdit()
     {
+        SuccessMessage = "";
         isEditing = true;
     }
 
     private void CancelEdit()
     {
+        SuccessMessage = "";
         isEditing = false;
-        // TODO: Reload original data
+        // Reload original data
+        Task.Run(LoadProfileAsync);
     }
 
     private async Task SaveProfile()
@@ -389,15 +348,19 @@
 
         try
         {
-            // TODO: Call API to save profile
-            // await ProfileService.UpdateAsync(userProfile);
-            
-            await Task.Delay(1000);
-            
-            isEditing = false;
-            
-            // Show success message
-            Console.WriteLine("Profile saved successfully!");
+            var privateHttp = HttpClientFactory.CreateClient("Private");
+            var response = await privateHttp.PutAsJsonAsync("api/user/profile", userProfile);
+            if (response.IsSuccessStatusCode)
+            {
+                isEditing = false;
+                SuccessMessage = "Profile updated successfully!";
+                await LoadProfileAsync(); // Reload to get updated data
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error saving profile: {error}");
+            }
         }
         catch (Exception ex)
         {
@@ -420,49 +383,102 @@
         currentPassword = "";
         newPassword = "";
         confirmPassword = "";
+        ErrorMessage = "";
     }
 
     private async Task UpdatePassword()
     {
-        // TODO: Validate and update password
-        if (newPassword != confirmPassword)
+        ErrorMessage = "";
+
+        // Client-side validation
+        if (string.IsNullOrWhiteSpace(currentPassword))
         {
-            // Show error
+            ErrorMessage = "Current password is required";
             return;
         }
 
-        // TODO: Call API
-        await Task.Delay(500);
-        ClosePasswordModal();
-    }
-
-    private void DeleteAccount()
-    {
-        // TODO: Show confirmation dialog and delete account
-        var confirmed = true; // Show confirmation modal
-        if (confirmed)
+        if (string.IsNullOrWhiteSpace(newPassword))
         {
-            // Call API to delete account
+            ErrorMessage = "New password is required";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(confirmPassword))
+        {
+            ErrorMessage = "Password confirmation is required";
+            return;
+        }
+
+        if (newPassword.Length < 6)
+        {
+            ErrorMessage = "New password must be at least 6 characters";
+            return;
+        }
+
+        if (newPassword != confirmPassword)
+        {
+            ErrorMessage = "New passwords do not match";
+            return;
+        }
+
+        try
+        {
+            var changePasswordDto = new StyleSystem.Shared.Dtos.ChangePasswordDto
+            {
+                CurrentPassword = currentPassword,
+                NewPassword = newPassword,
+                ConfirmPassword = confirmPassword
+            };
+
+            var privateHttp = HttpClientFactory.CreateClient("Private");
+            var response = await privateHttp.PutAsJsonAsync("api/user/change-password", changePasswordDto);
+
+            if (response.IsSuccessStatusCode)
+            {
+                SuccessMessage = "Password changed successfully!";
+                ClosePasswordModal();
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                ErrorMessage = error;
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"An error occurred while changing the password: {ex.Message}";
+            Console.WriteLine($"Error changing password: {ex.Message}");
         }
     }
 
-    public class UserProfileModel
+    private async Task DeleteAccount()
     {
-        [System.ComponentModel.DataAnnotations.Required(ErrorMessage = "Full name is required")]
-        public string FullName { get; set; } = "";
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete your account? This action cannot be undone.");
+        if (confirmed)
+        {
+            try
+            {
+                var privateHttp = HttpClientFactory.CreateClient("Private");
+                var response = await privateHttp.DeleteAsync("api/user/me");
+                if (response.IsSuccessStatusCode)
+                {
+                    await localStorageService.RemoveItemAsync("authToken");
 
-        public string Username { get; set; } = "";
+                    var customAuth = (CustomAuthStateProvider)authenticationStateProvider;
+                    customAuth.NotifyUserLogout();
 
-        [System.ComponentModel.DataAnnotations.EmailAddress(ErrorMessage = "Invalid email format")]
-        public string Email { get; set; } = "";
-
-        public string PhoneNumber { get; set; } = "";
-        public string BodyType { get; set; } = "";
-        public string Gender { get; set; } = "";
-        public string AgeRange { get; set; } = "";
-        public string FavoriteColors { get; set; } = "";
-        public string StyleDescription { get; set; } = "";
-        public bool EmailNotifications { get; set; }
-        public bool ProfilePublic { get; set; }
+                    NavigationManager.NavigateTo("/");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Error deleting account: {error}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting account: {ex.Message}");
+            }
+        }
     }
 }

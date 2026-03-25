@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using StyleSystem.Shared.Dtos;
 using StyleSystem.Web.Abstractions;
 using StyleSystem.Web.Auth;
+using StyleSystem.Web.Dtos.CompleteProfile;
 
 namespace StyleSystem.Web.Services;
 
@@ -14,6 +15,7 @@ public class UserService(
 {
     private string key = "api/user/";
     private HttpClient publicHttp = httpClientFactory.CreateClient("Public");
+    private HttpClient privateHttp = httpClientFactory.CreateClient("Private");
 
     public async ValueTask<bool> LoginAsync(LoginUserDto user, CancellationToken cancellationToken = default)
     {
@@ -58,6 +60,20 @@ public class UserService(
             }
 
             return false;
+        }
+        catch(Exception)
+        {
+            return false;
+        }
+    }
+
+    public async ValueTask<bool> UpdateUserAsync(ProfileModel profile, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var result = await privateHttp.PutAsJsonAsync(key + "profile", profile, cancellationToken);
+
+            return result.IsSuccessStatusCode;
         }
         catch(Exception)
         {

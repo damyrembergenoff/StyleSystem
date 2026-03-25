@@ -13,10 +13,16 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddApiClients(builder.Configuration);
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<DashboardService>();
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+builder.Services.AddScoped<RecommendationApiService>();
+builder.Services.AddScoped<RecommendationStateService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddAuthorizationCore();
 
 builder.Services.AddBlazoredLocalStorage();
 

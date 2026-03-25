@@ -22,18 +22,29 @@ namespace StyleSystem.Api.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("StyleSystem.Api.Entities.Chat", b =>
+            modelBuilder.Entity("StyleSystem.Api.Entities.Recommendation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("AdditionalPreferences")
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<short?>("Title")
-                        .HasMaxLength(200)
-                        .HasColumnType("smallint");
+                    b.Property<string>("Occasion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("RecommendationText")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Season")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Temperature")
+                        .HasColumnType("text");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -42,36 +53,10 @@ namespace StyleSystem.Api.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Chats");
+                    b.ToTable("Recommendations");
                 });
 
-            modelBuilder.Entity("StyleSystem.Api.Entities.ChatMessage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ChatId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChatId");
-
-                    b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("StyleSystem.Api.Entities.FashionRecommendation", b =>
+            modelBuilder.Entity("StyleSystem.Api.Entities.RecommendationImage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -82,26 +67,23 @@ namespace StyleSystem.Api.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("NOW()");
 
-                    b.Property<string>("ImagePrompt")
-                        .HasColumnType("text");
-
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<string>("TextRecommendation")
-                        .HasColumnType("text");
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("RecommendationId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedAt");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("RecommendationId");
 
-                    b.ToTable("Recommendations");
+                    b.ToTable("RecommendationImages");
                 });
 
             modelBuilder.Entity("StyleSystem.Api.Entities.User", b =>
@@ -109,6 +91,9 @@ namespace StyleSystem.Api.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<int?>("Age")
+                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -156,29 +141,7 @@ namespace StyleSystem.Api.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("StyleSystem.Api.Entities.Chat", b =>
-                {
-                    b.HasOne("StyleSystem.Api.Entities.User", "User")
-                        .WithMany("Chats")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("StyleSystem.Api.Entities.ChatMessage", b =>
-                {
-                    b.HasOne("StyleSystem.Api.Entities.Chat", "Chat")
-                        .WithMany("Messages")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chat");
-                });
-
-            modelBuilder.Entity("StyleSystem.Api.Entities.FashionRecommendation", b =>
+            modelBuilder.Entity("StyleSystem.Api.Entities.Recommendation", b =>
                 {
                     b.HasOne("StyleSystem.Api.Entities.User", "User")
                         .WithMany("Recommendations")
@@ -189,15 +152,24 @@ namespace StyleSystem.Api.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("StyleSystem.Api.Entities.Chat", b =>
+            modelBuilder.Entity("StyleSystem.Api.Entities.RecommendationImage", b =>
                 {
-                    b.Navigation("Messages");
+                    b.HasOne("StyleSystem.Api.Entities.Recommendation", "Recommendation")
+                        .WithMany("Images")
+                        .HasForeignKey("RecommendationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recommendation");
+                });
+
+            modelBuilder.Entity("StyleSystem.Api.Entities.Recommendation", b =>
+                {
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("StyleSystem.Api.Entities.User", b =>
                 {
-                    b.Navigation("Chats");
-
                     b.Navigation("Recommendations");
                 });
 #pragma warning restore 612, 618

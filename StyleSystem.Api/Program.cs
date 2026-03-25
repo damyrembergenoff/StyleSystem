@@ -27,14 +27,24 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
-builder.Services.AddScoped<IGroqService, GroqService>();
+builder.Services.AddScoped<IRecommendationService, RecommendationService>();
+builder.Services.AddScoped<IImageStorageService, LocalImageStorageService>();
 builder.Services.AddScoped<SeedService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IPollinationService, PollinationService>();
 builder.Services.AddScoped<IAuthenticationStateService, AuthenticationStateService>();
+builder.Services.AddScoped<ITextAiService, GroqAiService>();
+builder.Services.AddScoped<IImageAiService, CloudflareAiService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<JwtService>();
 builder.Configuration.AddUserSecrets<Program>();
+builder.Services.AddDirectoryBrowser();
+builder.Services.AddHttpClient<IImageAiService, CloudflareAiService>(client =>
+{
+    client.Timeout = TimeSpan.FromMinutes(2);
+});
+builder.Services.AddLogging();
+
 
 builder.Services.AddAuthentication()
     .AddJwtBearer(options =>
@@ -54,6 +64,16 @@ builder.Services.AddAuthentication()
         };
     });
 
+var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+if (!Directory.Exists(webRootPath))
+    Directory.CreateDirectory(webRootPath);
+
+var generatedImagesPath = Path.Combine(webRootPath, "generated-images");
+if (!Directory.Exists(generatedImagesPath))
+    Directory.CreateDirectory(generatedImagesPath);
+
+builder.Environment.WebRootPath = webRootPath;
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -64,6 +84,8 @@ using (var scope = app.Services.CreateScope())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowedOrigins");
+
+app.UseStaticFiles();
 
 app.MapControllers();
 

@@ -12,7 +12,6 @@ public class CustomAuthStateProvider(ILocalStorageService localStorageService) :
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
         var token = await localStorageService.GetItemAsync<string>("authToken");
-        Console.WriteLine($"Retrieved jwt token: {token}");
 
         if (string.IsNullOrWhiteSpace(token))
         {

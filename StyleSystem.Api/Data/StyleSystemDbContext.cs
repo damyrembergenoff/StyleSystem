@@ -8,9 +8,8 @@ public class StyleSystemDbContext(
     DbContextOptions<StyleSystemDbContext> options) : DbContext(options)
 {
     public required DbSet<User> Users { get; set; }
-    public required DbSet<FashionRecommendation> Recommendations { get; set; }
-    public required DbSet<Chat> Chats { get; set; }
-    public required DbSet<ChatMessage> Messages { get; set; }
+    public required DbSet<Recommendation> Recommendations { get; set; }
+    public required DbSet<RecommendationImage> RecommendationImages { get; set; }
     
     public async new ValueTask<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -45,6 +44,9 @@ public class StyleSystemDbContext(
             entity.Property(u => u.PasswordHash)
                 .IsRequired(true)
                 .HasMaxLength(256);
+            
+            entity.Property(u => u.Age)
+                .IsRequired(false);
 
             entity.Property(e => e.Height)
                 .IsRequired(false);
@@ -76,79 +78,32 @@ public class StyleSystemDbContext(
                 .WithOne(f => f.User)
                 .HasForeignKey(f => f.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-            
-            entity.HasMany(e => e.Chats)
-                .WithOne(ch => ch.User)
-                .HasForeignKey(ch => ch.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
         });
         
-        modelBuilder.Entity<FashionRecommendation>(entity =>
+        modelBuilder.Entity<RecommendationImage>(entity =>
         {
             entity.HasKey(e => e.Id);
 
-            entity.Property(e => e.TextRecommendation)
-                .HasColumnType("text")
-                .IsRequired(false);
-
             entity.Property(e => e.ImageUrl)
                 .HasMaxLength(500)
-                .IsRequired(false);
-
-            entity.Property(e => e.ImagePrompt)
-                .HasColumnType("text")
                 .IsRequired(false);
 
             entity.Property(e => e.CreatedAt)
                 .IsRequired()
                 .HasDefaultValueSql("NOW()");
 
-            entity.Property(e => e.UserId)
+            entity.Property(e => e.Order)
+                .IsRequired(true);
+
+            entity.Property(e => e.RecommendationId)
                 .IsRequired();
 
-            entity.HasIndex(e => e.UserId);
+            entity.HasIndex(e => e.RecommendationId);
             entity.HasIndex(e => e.CreatedAt);
 
-            entity.HasOne(e => e.User)
-                .WithMany(e => e.Recommendations)
-                .HasForeignKey(e => e.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-
-        modelBuilder.Entity<Chat>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            
-            entity.Property(e => e.Title)
-                .HasMaxLength(200)
-                .IsRequired(false);
-
-            entity.HasOne(e => e.User)
-                .WithMany(u => u.Chats)
-                .HasForeignKey(ch => ch.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-            
-            entity.HasMany(ch => ch.Messages)
-                .WithOne(m => m.Chat)
-                .HasForeignKey(m => m.ChatId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-
-        modelBuilder.Entity<ChatMessage>(e =>
-        {
-            e.HasKey(e => e.Id);
-
-            e.Property(e => e.Content)
-                .HasColumnType("text")
-                .IsRequired(false);
-            
-            e.Property(e => e.Role)
-                .IsRequired(true)
-                .HasConversion<string>();
-            
-            e.HasOne(e => e.Chat)
-                .WithMany(ch => ch.Messages)
-                .HasForeignKey(m => m.ChatId)
+            entity.HasOne(e => e.Recommendation)
+                .WithMany(e => e.Images)
+                .HasForeignKey(e => e.RecommendationId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
 

@@ -1,4 +1,8 @@
 @page "/"
+@using StyleSystem.Web.Auth
+@inject NavigationManager Navigation
+@inject StyleSystem.Web.Services.RecommendationApiService RecommendationApi
+@inject StyleSystem.Web.Services.RecommendationStateService RecommendationState
 
 <div class="landing-page">
     <!-- Background Image with Overlay -->
@@ -10,100 +14,300 @@
             AI-Powered Fashion Recommendations
         </h1>
         <p class="hero-subtitle fade-in">
-            Describe your body type and occasion, and our AI will generate personalized outfit recommendations tailored just for you.
+            Answer a few questions about yourself and get personalized outfit recommendations tailored just for you.
         </p>
 
-        <!-- Input Area (Similar to Adobe Firefly) -->
+        <!-- Input Area -->
         <div class="input-container slide-in-up">
-            <form @onsubmit="HandleGenerate">
+            <form @onsubmit="HandleGenerate" @onsubmit:preventDefault="false">
+                <!-- Step 1: Gender Selection -->
                 <div class="input-group">
-                    <label for="bodyType">Body Type</label>
-                    <select @bind="bodyType" id="bodyType" class="input-field input-select">
-                        <option value="">Select your body type</option>
-                        <option value="athletic">Athletic</option>
-                        <option value="slim">Slim</option>
-                        <option value="curvy">Curvy</option>
-                        <option value="plus-size">Plus Size</option>
-                        <option value="petite">Petite</option>
-                    </select>
+                    <label class="input-label">Select Your Gender *</label>
+                    <div class="gender-selection">
+                        <label class="gender-option @(selectedGender == "Male" ? "selected" : "")">
+                            <input type="radio" name="gender" value="Male" @onchange="@(() => SelectGender("Male"))" />
+                            <div class="gender-card">
+                                <svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2a5 5 0 1 0 5 5 5 5 0 0 0-5-5zm0 8a3 3 0 1 1 3-3 3 3 0 0 1-3 3zm9 11v-1a7 7 0 0 0-7-7h-4a7 7 0 0 0-7 7v1h2v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1z"/>
+                                </svg>
+                                <span>Male</span>
+                            </div>
+                        </label>
+                        <label class="gender-option @(selectedGender == "Female" ? "selected" : "")">
+                            <input type="radio" name="gender" value="Female" @onchange="@(() => SelectGender("Female"))" />
+                            <div class="gender-card">
+                                <svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2a5 5 0 1 0 5 5 5 5 0 0 0-5-5zm0 8a3 3 0 1 1 3-3 3 3 0 0 1-3 3zm0 1a7 7 0 0 0-7 7v1h14v-1a7 7 0 0 0-7-7zm0 2a5 5 0 0 1 5 5H7a5 5 0 0 1 5-5z"/>
+                                </svg>
+                                <span>Female</span>
+                            </div>
+                        </label>
+                    </div>
                 </div>
 
-                <div class="input-group">
-                    <label for="occasion">Where are you going?</label>
-                    <input 
-                        type="text" 
-                        @bind="occasion" 
-                        id="occasion" 
-                        class="input-field" 
-                        placeholder="e.g., Wedding, Office, Casual outing, Gym..."
-                    />
-                </div>
+                <!-- Step 2: Body Type Selection (shown after gender selection) -->
+                @if (!string.IsNullOrEmpty(selectedGender))
+                {
+                    <div class="input-group body-type-section fade-in">
+                        <label class="input-label">Select Your Body Type *</label>
+                        
+                        <!-- Body Type Reference Image -->
+                        <div class="body-type-reference">
+                            <img src="/images/@(selectedGender.ToLower())-body-types.png" 
+                                 alt="@selectedGender Body Types" 
+                                 class="body-types-image" />
+                        </div>
 
-                <div class="input-group">
-                    <label for="preferences">Style Preferences (Optional)</label>
-                    <textarea 
-                        @bind="preferences" 
-                        id="preferences" 
-                        class="input-field input-textarea" 
-                        placeholder="Tell us more about your style... colors, patterns, comfort level, etc."
-                    ></textarea>
-                </div>
+                        <!-- Body Type Options -->
+                        <div class="body-type-options">
+                            @if (selectedGender == "Male")
+                            {
+                                @foreach (var bodyType in maleBodyTypes)
+                                {
+                                    <label class="body-type-radio @(selectedBodyType == bodyType.Value ? "selected" : "")">
+                                        <input type="radio" 
+                                               name="bodyType" 
+                                               value="@bodyType.Value" 
+                                               @onchange="@(() => selectedBodyType = bodyType.Value)" />
+                                        <span class="body-type-label">@bodyType.Display</span>
+                                    </label>
+                                }
+                            }
+                            else
+                            {
+                                @foreach (var bodyType in femaleBodyTypes)
+                                {
+                                    <label class="body-type-radio @(selectedBodyType == bodyType.Value ? "selected" : "")">
+                                        <input type="radio" 
+                                               name="bodyType" 
+                                               value="@bodyType.Value" 
+                                               @onchange="@(() => selectedBodyType = bodyType.Value)" />
+                                        <span class="body-type-label">@bodyType.Display</span>
+                                    </label>
+                                }
+                            }
+                        </div>
+                    </div>
 
-                <button type="submit" class="btn btn-generate btn-full">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                    </svg>
-                    Generate Style Recommendations
-                </button>
+                    <!-- Step 3: Age Range -->
+                    <div class="input-group fade-in">
+                        <label for="ageRange" class="input-label">Age Range *</label>
+                        <select @bind="selectedAgeRange" id="ageRange" class="input-field input-select">
+                            <option value="">Select your age range</option>
+                            <option value="18-25">18-25</option>
+                            <option value="26-35">26-35</option>
+                            <option value="36-45">36-45</option>
+                            <option value="46-55">46-55</option>
+                            <option value="56+">56+</option>
+                        </select>
+                    </div>
+
+                    <!-- Step 4: Occasion -->
+                    <div class="input-group fade-in">
+                        <label for="occasion" class="input-label">Where are you going? *</label>
+                        <input 
+                            type="text" 
+                            @bind="occasion" 
+                            id="occasion" 
+                            class="input-field" 
+                            placeholder="e.g., Wedding, Office, Casual outing, Gym..."
+                        />
+                    </div>
+
+                    <!-- Step 5: Season -->
+                    <div class="input-group fade-in">
+                        <label for="season" class="input-label">Season *</label>
+                        <select @bind="selectedSeason" id="season" class="input-field input-select">
+                            <option value="">Select season</option>
+                            <option value="Spring">🌸 Spring</option>
+                            <option value="Summer">☀️ Summer</option>
+                            <option value="Fall">🍂 Fall</option>
+                            <option value="Winter">❄️ Winter</option>
+                        </select>
+                    </div>
+
+                    <!-- Step 6: Temperature -->
+                    <div class="input-group fade-in">
+                        <label for="temperature" class="input-label">Temperature *</label>
+                        <select @bind="selectedTemperature" id="temperature" class="input-field input-select">
+                            <option value="">Select temperature</option>
+                            <option value="Hot">🌡️ Hot (25°C+)</option>
+                            <option value="Warm">☀️ Warm (18-25°C)</option>
+                            <option value="Cool">🌤️ Cool (10-18°C)</option>
+                            <option value="Cold">❄️ Cold (below 10°C)</option>
+                        </select>
+                    </div>
+
+                    <!-- Step 7: Additional Description (Optional) -->
+                    <div class="input-group fade-in">
+                        <label for="preferences" class="input-label">Additional Preferences (Optional)</label>
+                        <textarea 
+                            @bind="additionalPreferences" 
+                            id="preferences" 
+                            class="input-field input-textarea" 
+                            placeholder="Tell us more about your style preferences, colors you like, comfort requirements, etc."
+                            rows="3"
+                        ></textarea>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <button type="submit" class="btn btn-generate btn-full" disabled="@(!IsFormValid() || isLoading)">
+                        @if (isLoading)
+                        {
+                            <span>Generating...</span>
+                        }
+                        else
+                        {
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                            </svg>
+                            <span>Generate Style Recommendations</span>
+                        }
+                    </button>
+
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="error-message">@errorMessage</div>
+                    }
+                }
             </form>
         </div>
 
-        <!-- Features (Optional) -->
-        <div class="features-preview" style="margin-top: 3rem; display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;">
-            <div style="color: white; text-align: center; max-width: 200px;">
-                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎨</div>
-                <div style="font-weight: 600; margin-bottom: 0.25rem;">AI-Powered</div>
-                <div style="font-size: 0.875rem; opacity: 0.9;">Smart outfit generation</div>
+        <!-- Features Preview -->
+        <div class="features-preview">
+            <div class="feature-item">
+                <div class="feature-icon">🎨</div>
+                <div class="feature-title">AI-Powered</div>
+                <div class="feature-text">Smart outfit generation</div>
             </div>
-            <div style="color: white; text-align: center; max-width: 200px;">
-                <div style="font-size: 2rem; margin-bottom: 0.5rem;">👔</div>
-                <div style="font-weight: 600; margin-bottom: 0.25rem;">Personalized</div>
-                <div style="font-size: 0.875rem; opacity: 0.9;">Tailored to your body</div>
+            <div class="feature-item">
+                <div class="feature-icon">👔</div>
+                <div class="feature-title">Personalized</div>
+                <div class="feature-text">Tailored to your body</div>
             </div>
-            <div style="color: white; text-align: center; max-width: 200px;">
-                <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</div>
-                <div style="font-weight: 600; margin-bottom: 0.25rem;">Instant</div>
-                <div style="font-size: 0.875rem; opacity: 0.9;">Results in seconds</div>
+            <div class="feature-item">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-title">Instant</div>
+                <div class="feature-text">Results in seconds</div>
             </div>
         </div>
     </div>
 </div>
 
 @code {
-    private string bodyType = "";
+    [Inject] public required AuthenticationStateProvider authenticationStateProvider { get; set; }
+
+    // Form fields
+    private string selectedGender = "";
+    private string selectedBodyType = "";
+    private string selectedAgeRange = "";
     private string occasion = "";
-    private string preferences = "";
+    private string selectedSeason = "";
+    private string selectedTemperature = "";
+    private string additionalPreferences = "";
+    private string errorMessage = "";
+    private bool isLoading = false;
 
-    private void HandleGenerate()
+    protected override async Task OnInitializedAsync()
     {
-        // Check if user is logged in
-        // If not, redirect to login
-        // Navigation.NavigateTo("/login");
+        var customAuth = (CustomAuthStateProvider)authenticationStateProvider;
 
-        // TODO: Call API to generate recommendations
-        // For now, just log or navigate
-        if (string.IsNullOrWhiteSpace(bodyType) || string.IsNullOrWhiteSpace(occasion))
+        var authState = await customAuth.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if(user.Identity is not null && user.Identity.IsAuthenticated)
+            Navigation.NavigateTo("/dashboard", true);
+    }
+
+    // Body type mappings
+    private List<BodyTypeOption> maleBodyTypes = new()
+    {
+        new("Rectangle", "Rectangle"),
+        new("InvertedTriangle", "Inverted Triangle"),
+        new("Trapezoid", "Trapezoid"),
+        new("Triangle", "Triangle"),
+        new("Oval", "Oval")
+    };
+
+    private List<BodyTypeOption> femaleBodyTypes = new()
+    {
+        new("Rectangle", "Rectangle"),
+        new("Pear", "Pear/Triangle"),
+        new("Hourglass", "Hourglass"),
+        new("InvertedTriangle", "Inverted Triangle"),
+        new("Diamond", "Diamond"),
+        new("Apple", "Round/Apple")
+    };
+
+    private void SelectGender(string gender)
+    {
+        selectedGender = gender;
+        selectedBodyType = "";
+        errorMessage = "";
+    }
+
+    private bool IsFormValid()
+    {
+        return !string.IsNullOrWhiteSpace(selectedGender) &&
+               !string.IsNullOrWhiteSpace(selectedBodyType) &&
+               !string.IsNullOrWhiteSpace(selectedAgeRange) &&
+               !string.IsNullOrWhiteSpace(occasion) &&
+               !string.IsNullOrWhiteSpace(selectedSeason) &&
+               !string.IsNullOrWhiteSpace(selectedTemperature);
+    }
+
+    private async Task HandleGenerate()
+    {
+        if (!IsFormValid())
         {
-            // Show error message
+            errorMessage = "Please fill in all required fields.";
             return;
         }
 
-        // Navigate to results page or show modal
-        Console.WriteLine($"Body Type: {bodyType}");
-        Console.WriteLine($"Occasion: {occasion}");
-        Console.WriteLine($"Preferences: {preferences}");
-        
-        // TODO: Navigate to recommendations page
-        // Navigation.NavigateTo("/recommendations");
+        isLoading = true;
+        errorMessage = "";
+
+        try
+        {
+            var dto = new StyleSystem.Api.Dtos.Recommendations.AnonymousRecommendationDto
+            {
+                Gender             = selectedGender,
+                BodyType           = selectedBodyType,
+                AgeRange           = selectedAgeRange,
+                Occasion           = occasion,
+                Season             = selectedSeason,
+                Temperature        = selectedTemperature,
+                AdditionalPreferences = string.IsNullOrWhiteSpace(additionalPreferences)
+                                        ? null
+                                        : additionalPreferences
+            };
+
+            var result = await RecommendationApi.CreateAnonymousAsync(dto);
+
+            RecommendationState.SetResult(result?.RecommendationText, result?.ImageUrls ?? []);
+
+            Navigation.NavigateTo("/results");
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Failed to generate recommendations. Please try again.";
+            Console.WriteLine($"[Index] Error: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    public class BodyTypeOption
+    {
+        public string Value { get; set; }
+        public string Display { get; set; }
+
+        public BodyTypeOption(string value, string display)
+        {
+            Value = value;
+            Display = display;
+        }
     }
 }

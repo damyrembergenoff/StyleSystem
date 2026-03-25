@@ -1,9 +1,16 @@
 @url = http://localhost:5000
 
-POST {{url}}/api/fashion/recommend
+POST {{url}}/api/recommendations/anonymous
 Content-Type: application/json
 
 {
-    "prompt": "Menga kechki bazim uchun classic obraz aytib bering."
+  "gender": "Male",
+  "bodyType": "Athletic",
+  "ageRange": "25-30",
+  "occasion": "Evening party",
+  "season": "Winter",
+  "temperature": "Cold",
+  "additionalPreferences": "Classic, elegant, dark colors"
 }
+
 ###

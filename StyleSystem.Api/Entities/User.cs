@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace StyleSystem.Api.Entities;
 
 public class User : EntityBase
@@ -6,6 +8,8 @@ public class User : EntityBase
     public string? Username { get; set; }
     public string? PasswordHash { get; set; }
 
+    [Range(0, 120)]
+    public int? Age { get; set; }
     public int? Height { get; set; }
     public int? Weight { get; set; }
     public EGender? Gender { get; set; }
@@ -13,6 +17,5 @@ public class User : EntityBase
     public EFemaleBodyType? FemaleBodyType { get; set; }
     public ESkinTone? SkinTone { get; set; }
 
-    public IList<FashionRecommendation> Recommendations { get; set; } = [];
-    public IList<Chat> Chats { get; set; } = [];
+    public IList<Recommendation> Recommendations { get; set; } = [];
 }

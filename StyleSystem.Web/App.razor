@@ -2,10 +2,11 @@
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData"
-                                DefaultLayout="@typeof(MainLayout)">
-                @* <NotAuthorized>
-                    <RedirectToLogin />
-                </NotAuthorized> *@
+                                DefaultLayout="@typeof(DynamicLayout)">
+
+                <NotAuthorized>
+                    <StyleSystem.Web.Components.RedirectToHome />
+                </NotAuthorized>
             </AuthorizeRouteView>
         </Found>
         <NotFound>

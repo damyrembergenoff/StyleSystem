@@ -1,0 +1,16 @@
+@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization
+
+<AuthorizeView>
+    <Authorized>
+        <LayoutView Layout="@typeof(AuthenticatedLayout)">
+            @Body
+        </LayoutView>
+    </Authorized>
+
+    <NotAuthorized>
+        <LayoutView Layout="@typeof(MainLayout)">
+            @Body
+        </LayoutView>
+    </NotAuthorized>
+</AuthorizeView>

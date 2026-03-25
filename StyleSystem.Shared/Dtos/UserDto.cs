@@ -6,6 +6,7 @@ public class UserDto
     public string? Password { get; set; }
 
     public string? FullName { get; set; }
+    public int? Age { get; set; }
     public int? Height { get; set; }
     public int? Weight { get; set; }
     public EGender? Gender { get; set; }

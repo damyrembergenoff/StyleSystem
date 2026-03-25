@@ -8,6 +8,4 @@ public enum EFemaleBodyType
     Rectangle,
     InvertedTriangle,
     Diamond,
-    Petite,
-    PlusSize,
 }

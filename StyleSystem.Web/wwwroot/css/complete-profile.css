@@ -1,0 +1,379 @@
+/* ============================================
+   COMPLETE PROFILE PAGE STYLES (SCOPED)
+   Faqat CompleteProfile sahifasiga ta'sir qiladi
+   ============================================ */
+
+/* Container */
+.complete-profile-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Profile Card */
+.complete-profile-container .profile-card {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 800px;
+    width: 100%;
+    padding: 2.5rem;
+    animation: completeProfileFadeIn 0.5s ease-in;
+}
+
+/* Header */
+.complete-profile-container .profile-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.complete-profile-container .profile-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.complete-profile-container .profile-subtitle {
+    font-size: 1rem;
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+}
+
+/* Progress Bar */
+.complete-profile-container .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.complete-profile-container .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #ec4899);
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+/* Form Section */
+.complete-profile-container .form-section {
+    margin-bottom: 2rem;
+}
+
+.complete-profile-container .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.complete-profile-container .section-description {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+}
+
+/* Input Group */
+.complete-profile-container .input-group {
+    margin-bottom: 1.5rem;
+}
+
+.complete-profile-container .input-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.complete-profile-container .input-field {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background: white;
+}
+
+.complete-profile-container .input-field:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Gender Selection */
+.complete-profile-container .gender-selection {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.complete-profile-container .gender-card {
+    padding: 2rem 1rem;
+    border: 3px solid #e5e7eb;
+    border-radius: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: white;
+}
+
+.complete-profile-container .gender-card:hover {
+    border-color: #c7d2fe;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
+.complete-profile-container .gender-card.selected {
+    border-color: #6366f1;
+    background: linear-gradient(135deg, #f0f4ff, #e0e7ff);
+}
+
+.complete-profile-container .gender-icon {
+    font-size: 4rem;
+    margin-bottom: 0.5rem;
+    color: #6366f1;
+}
+
+.complete-profile-container .gender-label {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Body Type Grid */
+.complete-profile-container .body-type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.complete-profile-container .body-type-card {
+    padding: 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: white;
+    text-align: center;
+}
+
+.complete-profile-container .body-type-card:hover {
+    border-color: #c7d2fe;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
+.complete-profile-container .body-type-card.selected {
+    border-color: #6366f1;
+    background: linear-gradient(135deg, #f0f4ff, #e0e7ff);
+}
+
+.complete-profile-container .body-type-image {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+    background: #f9fafb;
+    border-radius: 0.5rem;
+}
+
+.complete-profile-container .body-type-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.complete-profile-container .body-type-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+}
+
+.complete-profile-container .body-type-description {
+    font-size: 0.75rem;
+    color: #6b7280;
+    line-height: 1.4;
+}
+
+/* Skin Tone Grid */
+.complete-profile-container .skin-tone-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.complete-profile-container .skin-tone-card {
+    padding: 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: white;
+    text-align: center;
+}
+
+.complete-profile-container .skin-tone-card:hover {
+    border-color: #c7d2fe;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
+.complete-profile-container .skin-tone-card.selected {
+    border-color: #6366f1;
+    background: linear-gradient(135deg, #f0f4ff, #e0e7ff);
+}
+
+.complete-profile-container .skin-tone-color {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 0.75rem;
+    border: 3px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.complete-profile-container .skin-tone-card.selected .skin-tone-color {
+    border-color: #6366f1;
+}
+
+.complete-profile-container .skin-tone-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Alerts */
+.complete-profile-container .alert {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+.complete-profile-container .alert-error {
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+    color: #dc2626;
+}
+
+.complete-profile-container .alert-success {
+    background: #d1fae5;
+    border: 1px solid #6ee7b7;
+    color: #065f46;
+}
+
+.complete-profile-container .error-text {
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+/* Buttons */
+.complete-profile-container .button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.complete-profile-container .btn {
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    flex: 1;
+}
+
+.complete-profile-container .btn-primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+}
+
+.complete-profile-container .btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.complete-profile-container .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.complete-profile-container .btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 2px solid #e5e7eb;
+}
+
+.complete-profile-container .btn-secondary:hover {
+    background: #e5e7eb;
+    transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes completeProfileFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.complete-profile-container .fade-in {
+    animation: completeProfileFadeIn 0.5s ease-in;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .complete-profile-container {
+        padding: 1rem;
+    }
+
+    .complete-profile-container .profile-card {
+        padding: 1.5rem;
+    }
+
+    .complete-profile-container .profile-title {
+        font-size: 1.5rem;
+    }
+
+    .complete-profile-container .gender-selection {
+        grid-template-columns: 1fr;
+    }
+
+    .complete-profile-container .body-type-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .complete-profile-container .skin-tone-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .complete-profile-container .button-group {
+        flex-direction: column;
+    }
+
+    .complete-profile-container .btn {
+        width: 100%;
+    }
+}

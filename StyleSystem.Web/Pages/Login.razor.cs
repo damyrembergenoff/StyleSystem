@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Components;
 using StyleSystem.Shared.Dtos;
+using StyleSystem.Web.Abstractions;
 
 namespace StyleSystem.Web.Pages;
 
 public partial class Login
 {
+    [Inject] private IUserService UserService { get; set; } = default!;
     private LoginUserDto loginModel = new();
     private string errorMessage = "";
     private bool isLoading = false;
@@ -13,38 +16,24 @@ public partial class Login
         isLoading = true;
         errorMessage = "";
 
-        try
+        if (string.IsNullOrWhiteSpace(loginModel.Username) || string.IsNullOrWhiteSpace(loginModel.Password))
         {
-            // TODO: Implement actual login logic with your API
-            // Example:
-            // var response = await AuthService.LoginAsync(loginModel);
-            
-            // Simulate API call
-            await Task.Delay(1000);
+            errorMessage = "Please fill in all fields.";
+            isLoading = false;
+            return;
+        }
 
-            // Temporary validation
-            if (string.IsNullOrWhiteSpace(loginModel.Username) || string.IsNullOrWhiteSpace(loginModel.Password))
-            {
-                errorMessage = "Please fill in all fields.";
-                isLoading = false;
-                return;
-            }
+        var isSuccess = await UserService.LoginAsync(loginModel);
 
-            // TODO: Replace with real authentication
-            // If successful:
-            // await LocalStorage.SetItemAsync("authToken", response.Token);
-            // Navigation.NavigateTo("/dashboard");
-
-            // For now, just navigate
+        if(isSuccess is true)
+        {
             Navigation.NavigateTo("/dashboard");
         }
-        catch (Exception ex)
+        else
         {
-            errorMessage = "Login failed. Please check your credentials.";
+            errorMessage = "Invalid username or password.";
         }
-        finally
-        {
-            isLoading = false;
-        }
+
+        isLoading = false;
     }
 }
