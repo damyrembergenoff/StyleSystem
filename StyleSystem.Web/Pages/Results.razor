@@ -160,8 +160,23 @@
 
     private async Task LoadAuthenticatedResult(string id)
     {
-        // TODO: GET /api/recommendations/{id}
-        await Task.CompletedTask;
+        try
+        {
+            var response = await RecommendationApi.GetByIdAsync(Guid.Parse(id));
+            if (response != null)
+            {
+                recommendationText = response.RecommendationText;
+                imageUrls = response.Images.Select(i => i.ImageUrl ?? "").ToList();
+            }
+            else
+            {
+                errorMessage = "Recommendation not found";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to load recommendation: {ex.Message}";
+        }
     }
 
     private string GetFullImageUrl(string url)

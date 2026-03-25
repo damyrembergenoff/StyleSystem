@@ -3,6 +3,7 @@ namespace StyleSystem.Shared.DTOs.Recommendations;
 public class RecommendationResponseDto
 {
     public Guid Id { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
     public string? Occasion { get; set; }
     public string? Season { get; set; }
     public string? Temperature { get; set; }

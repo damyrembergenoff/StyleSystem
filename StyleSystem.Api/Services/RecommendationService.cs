@@ -126,6 +126,7 @@ public class RecommendationService(
             .Where(r => r.UserId == userId)
             .Include(r => r.Images)
             .OrderByDescending(r => r.CreatedAt)
+            .Take(10)
             .ToListAsync();
 
         return recommendations.Select(MapToResponseDto).ToList();
@@ -240,6 +241,7 @@ public class RecommendationService(
         return new RecommendationResponseDto
         {
             Id = recommendation.Id,
+            CreatedAt = recommendation.CreatedAt,
             Occasion = recommendation.Occasion,
             Season = recommendation.Season,
             Temperature = recommendation.Temperature,
