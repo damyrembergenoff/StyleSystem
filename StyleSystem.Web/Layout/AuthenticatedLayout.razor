@@ -237,11 +237,9 @@
         var customAuth = (CustomAuthStateProvider)authProvider;
         customAuth.NotifyUserLogout();
         
-        // Close menus
         isUserMenuOpen = false;
         isMobileMenuOpen = false;
         
-        // Navigate to login
         Navigation.NavigateTo("login");
     }
 }
