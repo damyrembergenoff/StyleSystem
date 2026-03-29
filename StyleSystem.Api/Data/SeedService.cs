@@ -25,6 +25,8 @@ public class SeedService(
             logger.LogInformation("Seeding Users is skipped. Users table has entities.");
             return;
         }
+
+        await Task.CompletedTask;
         
         // List<User> users =
         // [
