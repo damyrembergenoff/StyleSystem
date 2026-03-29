@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "StyleSystem.Web",
   "resources": {
-    "hash": "sha256-/veypxg6Ehs6Qm19/WsV9Al9H/sMmOc9RUNf1vN0q5M=",
+    "hash": "sha256-Y3rRxAy3120YPoPNrq4UNGKn94sZNOQI2YECyALKDkI=",
     "jsModuleNative": {
       "dotnet.native.js": "sha256-A16ka545FHaB+QXjyJ4exXh7XpBAAIFnX8YkC4xAng8="
     },
@@ -45,8 +45,8 @@
       "Microsoft.IdentityModel.Tokens.wasm": "sha256-xrEbmkEGkeiP8prkVlLQbj+oYoSphRjZZN7Pmad9d38=",
       "Microsoft.JSInterop.WebAssembly.wasm": "sha256-jY5jCfGtvxvrCqIe6qLo82M6eF/a19pO3pO7KbeBzSg=",
       "Microsoft.JSInterop.wasm": "sha256-fAY6tJtwOmBhNBdWMOSSSHBM2Ezh0qccRETNTV4WLWw=",
-      "StyleSystem.Shared.wasm": "sha256-tUJ0Q1oeP/q1LZqepnXsn/wdezXoltXR/H9YkKTMel8=",
-      "StyleSystem.Web.wasm": "sha256-6vGtC4jbSRU6yVoZrPBx6aN6DrP5Z4EpT1V/J7Ds2rU=",
+      "StyleSystem.Shared.wasm": "sha256-oCinkJKvphcuwAZRfLnmqjoeE1JEYmzBDtlg5tbNoFY=",
+      "StyleSystem.Web.wasm": "sha256-qbRMHFbEzyhRk57LYjEHiBnNKjk9d8R68faV1J+nxxY=",
       "System.Collections.Concurrent.wasm": "sha256-jmJl0GqBlEW8JbI3zkgAHThAAX9EIunXe19xRfhpYAA=",
       "System.Collections.NonGeneric.wasm": "sha256-EXzq3xJUZUy7JDCFvInfrAZJP+y3UdVYjF4i6lpnxcM=",
       "System.Collections.Specialized.wasm": "sha256-9oJhZTQbFdKnHMMEvqDbMExNnVU/CqQeFQUZZxHKxiw=",
