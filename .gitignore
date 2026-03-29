@@ -1,6 +1,8 @@
 bin/
 obj/
 .vs/
+publish_test/
+publish/
 *.user
 *.suo
 appsettings.Development.json
