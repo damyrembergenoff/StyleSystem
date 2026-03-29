@@ -1,4 +1,4 @@
-@page "/authresults/{id}"   
+@page "/authresults"   
 @layout AuthenticatedLayout
 @attribute [Authorize]
 
@@ -116,7 +116,6 @@
 </div>
 
 @code {
-    [Parameter] public string? Id { get; set; }
     [Inject] public required IConfiguration Configuration { get; set; }
 
     private bool isLoading = true;
@@ -126,12 +125,11 @@
     private string? recommendationText;
     private List<string> imageUrls = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         try
         {
-            if (!string.IsNullOrEmpty(Id))
-                await LoadAuthenticatedResult(Id);
+            LoadAnonymousResult();
         }
         catch (Exception ex)
         {
@@ -143,25 +141,17 @@
         }
     }
 
-    private async Task LoadAuthenticatedResult(string id)
+    private void LoadAnonymousResult()
     {
-        try
+        if (!RecommendationState.HasResult)
         {
-            var response = await RecommendationApi.GetByIdAsync(Guid.Parse(id));
-            if (response != null)
-            {
-                recommendationText = response.RecommendationText;
-                imageUrls = response.Images.Select(i => i.ImageUrl ?? "").ToList();
-            }
-            else
-            {
-                errorMessage = "Recommendation not found";
-            }
+            Navigation.NavigateTo("");
+            return;
         }
-        catch (Exception ex)
-        {
-            errorMessage = $"Failed to load recommendation: {ex.Message}";
-        }
+
+        recommendationText = RecommendationState.RecommendationText;
+        imageUrls          = RecommendationState.ImageUrls;
+        RecommendationState.Clear();
     }
 
     private string GetFullImageUrl(string url)
@@ -178,6 +168,6 @@
     private void GoBack()
     {
         RecommendationState.Clear();
-        Navigation.NavigateTo("dashboard");
+        Navigation.NavigateTo("");
     }
 }
