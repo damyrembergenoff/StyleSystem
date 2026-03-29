@@ -26,8 +26,8 @@ public class JwtService(IConfiguration configuration)
 
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var expires = DateTime.UtcNow.AddMinutes(
-            Convert.ToDouble(jwtSettings["ExpireMinutes"])
+        var expires = DateTime.UtcNow.AddDays(
+            Convert.ToDouble(jwtSettings["ExpireDays"])
         );
 
         var token = new JwtSecurityToken(
