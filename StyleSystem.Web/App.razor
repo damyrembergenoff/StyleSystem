@@ -5,7 +5,8 @@
                                 DefaultLayout="@typeof(DynamicLayout)">
 
                 <NotAuthorized>
-                    <StyleSystem.Web.Components.RedirectToHome />
+                    <LayoutView Layout="@typeof(MainLayout)">
+                    </LayoutView>
                 </NotAuthorized>
             </AuthorizeRouteView>
         </Found>
