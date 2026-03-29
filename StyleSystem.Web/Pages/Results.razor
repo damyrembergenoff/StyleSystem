@@ -149,7 +149,7 @@
     {
         if (!RecommendationState.HasResult)
         {
-            Navigation.NavigateTo("/");
+            Navigation.NavigateTo("");
             return;
         }
 
@@ -191,6 +191,6 @@
     private void GoBack()
     {
         RecommendationState.Clear();
-        Navigation.NavigateTo("/");
+        Navigation.NavigateTo("");
     }
 }

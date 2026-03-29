@@ -15,7 +15,7 @@
             <p class="dashboard-subtitle">Ready to discover your perfect style for today?</p>
         </div>
         <div class="header-actions">
-            <a href="/recommendations" class="btn btn-primary btn-large">
+            <a href="recommendations" class="btn btn-primary btn-large">
                 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                 </svg>
@@ -73,7 +73,7 @@
     <div class="dashboard-section">
         <h2 class="section-title">Quick Actions</h2>
         <div class="quick-actions-grid">
-            <a href="/recommendations" class="action-card">
+            <a href="recommendations" class="action-card">
                 <div class="action-icon primary">
                     <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
@@ -83,7 +83,7 @@
                 <p class="action-description">Get AI-powered outfit suggestions for any occasion</p>
             </a>
 
-            <a href="/profile" class="action-card">
+            <a href="profile" class="action-card">
                 <div class="action-icon secondary">
                     <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -111,7 +111,7 @@
     <div class="dashboard-section">
         <div class="section-header">
             <h2 class="section-title">Recent Recommendations</h2>
-            <a href="/history" class="section-link">View All →</a>
+            <a href="history" class="section-link">View All →</a>
         </div>
 
         @if (dashboardData?.RecentActivities?.Count > 0)
@@ -140,7 +140,7 @@
                 </div>
                 <h3 class="empty-title">No recommendations yet</h3>
                 <p class="empty-description">Start by creating your first style recommendation!</p>
-                <a href="/recommendations" class="btn btn-primary">Get Started</a>
+                <a href="recommendations" class="btn btn-primary">Get Started</a>
             </div>
         }
     </div>

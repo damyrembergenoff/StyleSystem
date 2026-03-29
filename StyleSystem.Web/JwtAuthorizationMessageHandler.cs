@@ -28,7 +28,7 @@ public class JwtAuthorizationMessageHandler(
                 logger.LogInformation("Jwt invalid or expired. Redirecting to Login page.");
 
                 await localStorage.RemoveItemAsync("authToken");
-                navigationManager.NavigateTo("/login");
+                navigationManager.NavigateTo("login");
             }
 
             return response;

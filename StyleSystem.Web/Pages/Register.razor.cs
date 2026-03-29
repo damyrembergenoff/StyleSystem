@@ -33,7 +33,7 @@ public partial class Register
             if(isRegistered)
             {
                 successMessage = "Account created successfully! Redirecting to complete profile...";
-                Navigation.NavigateTo("/complete-profile");
+                Navigation.NavigateTo("complete-profile");
             }
             else
             {

@@ -27,7 +27,7 @@ public partial class Login
 
         if(isSuccess is true)
         {
-            Navigation.NavigateTo("/dashboard");
+            Navigation.NavigateTo("dashboard");
         }
         else
         {

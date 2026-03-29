@@ -216,7 +216,7 @@
         var user = authState.User;
 
         if(user.Identity is not null && user.Identity.IsAuthenticated)
-            Navigation.NavigateTo("/dashboard", true);
+            Navigation.NavigateTo("dashboard", true);
     }
 
     // Body type mappings
@@ -286,7 +286,7 @@
 
             RecommendationState.SetResult(result?.RecommendationText, result?.ImageUrls ?? []);
 
-            Navigation.NavigateTo("/results");
+            Navigation.NavigateTo("results");
         }
         catch (Exception ex)
         {

@@ -7,13 +7,13 @@
     <nav class="auth-navbar">
         <div class="navbar-container">
             <!-- Logo -->
-            <a href="/dashboard" class="navbar-logo">
+            <a href="dashboard" class="navbar-logo">
                 Style<span style="color: #ec4899;">System</span>
             </a>
 
             <!-- Desktop Navigation -->
             <div class="navbar-menu desktop-menu">
-                <a href="/dashboard" class="nav-link @GetActiveClass("/dashboard")">
+                <a href="dashboard" class="nav-link @GetActiveClass("dashboard")">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <rect x="3" y="3" width="7" height="7"></rect>
                         <rect x="14" y="3" width="7" height="7"></rect>
@@ -22,13 +22,13 @@
                     </svg>
                     Dashboard
                 </a>
-                <a href="/recommendations" class="nav-link @GetActiveClass("/recommendations")">
+                <a href="recommendations" class="nav-link @GetActiveClass("recommendations")">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                     </svg>
                     Get Recommendations
                 </a>
-                <a href="/history" class="nav-link @GetActiveClass("/history")">
+                <a href="history" class="nav-link @GetActiveClass("history")">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <line x1="12" y1="20" x2="12" y2="10"></line>
                         <line x1="18" y1="20" x2="18" y2="4"></line>
@@ -66,7 +66,7 @@
                                 </div>
                             </div>
                             <div class="dropdown-divider"></div>
-                            <a href="/profile" class="dropdown-item" @onclick="CloseUserMenu">
+                            <a href="profile" class="dropdown-item" @onclick="CloseUserMenu">
                                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
@@ -124,7 +124,7 @@
                 <div class="mobile-menu-divider"></div>
                 
                 <!-- Navigation Links -->
-                <a href="/dashboard" class="mobile-nav-link" @onclick="CloseMobileMenu">
+                <a href="dashboard" class="mobile-nav-link" @onclick="CloseMobileMenu">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <rect x="3" y="3" width="7" height="7"></rect>
                         <rect x="14" y="3" width="7" height="7"></rect>
@@ -133,13 +133,13 @@
                     </svg>
                     Dashboard
                 </a>
-                <a href="/recommendations" class="mobile-nav-link" @onclick="CloseMobileMenu">
+                <a href="recommendations" class="mobile-nav-link" @onclick="CloseMobileMenu">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                     </svg>
                     Get Recommendations
                 </a>
-                <a href="/my-styles" class="mobile-nav-link" @onclick="CloseMobileMenu">
+                <a href="my-styles" class="mobile-nav-link" @onclick="CloseMobileMenu">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                     </svg>
@@ -148,7 +148,7 @@
                 
                 <div class="mobile-menu-divider"></div>
                 
-                <a href="/profile" class="mobile-nav-link" @onclick="CloseMobileMenu">Profile</a>
+                <a href="profile" class="mobile-nav-link" @onclick="CloseMobileMenu">Profile</a>
                 
                 <div class="mobile-menu-divider"></div>
                 
@@ -242,6 +242,6 @@
         isMobileMenuOpen = false;
         
         // Navigate to login
-        Navigation.NavigateTo("/login");
+        Navigation.NavigateTo("login");
     }
 }

@@ -149,7 +149,7 @@
                 .ToList() ?? new List<string>();
 
             RecommendationState.SetResult(result.RecommendationText, images);
-            Navigation.NavigateTo("/results");
+            Navigation.NavigateTo("results");
         }
         catch (Exception ex)
         {
@@ -161,6 +161,6 @@
         }
     }
 
-    private void GoBack() => Navigation.NavigateTo("/dashboard");
+    private void GoBack() => Navigation.NavigateTo("dashboard");
 }
 
