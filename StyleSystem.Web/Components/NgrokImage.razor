@@ -1,0 +1,22 @@
+@inject HttpClient Http
+@if (!string.IsNullOrEmpty(imageSrc))
+{
+    <img src="@imageSrc" @attributes="AdditionalAttributes" />
+}
+
+@code {
+    [Parameter] public string Url { get; set; } = "";
+    [Parameter(CaptureUnmatchedValues = true)] 
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+    
+    private string imageSrc = "";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (string.IsNullOrEmpty(Url)) return;
+        var response = await Http.GetAsync(Url);
+        var bytes = await response.Content.ReadAsByteArrayAsync();
+        var base64 = Convert.ToBase64String(bytes);
+        imageSrc = $"data:image/png;base64,{base64}";
+    }
+}

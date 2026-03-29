@@ -1,12 +1,17 @@
 @using Blazored.LocalStorage
+@using StyleSystem.Web.Auth
 @inject NavigationManager Navigation
 @inject ILocalStorageService LocalStorage
+@inject AuthenticationStateProvider authProvider
 
 @code {
     protected override async Task OnInitializedAsync()
     {
-        // Tokenni o'chirib keyin redirect qiling
         await LocalStorage.RemoveItemAsync("authToken");
+
+        var customAuth = (CustomAuthStateProvider)authProvider;
+        customAuth.NotifyUserLogout();
+
         Navigation.NavigateTo("login");
     }
 }
