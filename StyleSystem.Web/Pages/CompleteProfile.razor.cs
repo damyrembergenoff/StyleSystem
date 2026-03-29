@@ -26,7 +26,7 @@ public partial class CompleteProfile
 
         if(!user.Identity?.IsAuthenticated ?? true)
         {
-            Navigation.NavigateTo("/login");
+            Navigation.NavigateTo("login");
             return;
         }
 
@@ -216,7 +216,7 @@ public partial class CompleteProfile
             if (isSuccess)
             {
                 successMessage = "Profile completed successfully! Redirecting...";
-                Navigation.NavigateTo("/dashboard");
+                Navigation.NavigateTo("dashboard");
             }
 
             else
