@@ -6,10 +6,18 @@ public static class ServiceCollectionExtensions
     {
         var apiUrl = configuration.GetValue<string>("WebApiAddress") ?? string.Empty;
 
-        services.AddHttpClient("Public", client => client.BaseAddress = new Uri(apiUrl));
+        services.AddHttpClient("Public", client =>
+        {
+            client.BaseAddress = new Uri(apiUrl);
+            client.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "true");
+        });
 
         services
-            .AddHttpClient("Private", client => client.BaseAddress = new Uri(apiUrl))
+            .AddHttpClient("Private", client =>
+            {
+                client.BaseAddress = new Uri(apiUrl);
+                client.DefaultRequestHeaders.Add("ngrok-skip-browser-warning", "true");
+            })
             .AddHttpMessageHandler<JwtAuthorizationMessageHandler>();
         
         services.AddScoped<JwtAuthorizationMessageHandler>();
