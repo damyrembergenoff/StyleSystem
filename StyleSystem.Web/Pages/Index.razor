@@ -217,7 +217,7 @@
         var user = authState.User;
 
         if(user.Identity is not null && user.Identity.IsAuthenticated)
-            Navigation.NavigateTo("dashboard", true);
+            Navigation.NavigateTo("dashboard");
     }
 
     // Body type mappings
