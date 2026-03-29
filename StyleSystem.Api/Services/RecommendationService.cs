@@ -214,6 +214,10 @@ public class RecommendationService(
             4. Style tips specific for the occasion
             5. Alternative options if available
 
+            Respond in EXACTLY this JSON format.
+            All line breaks in "recommendation" must be escaped as \\n.
+            Do not return raw newlines inside JSON strings.
+
             Respond in EXACTLY this JSON format, nothing else:
             {jsonFormat}
             """;
@@ -298,6 +302,10 @@ public class RecommendationService(
 
             - You MUST explicitly reflect the user's characteristics in your explanation.
             - Explain WHY each item suits their specific physique, not just body type.
+
+            Respond in EXACTLY this JSON format.
+            All line breaks in "recommendation" must be escaped as \\n.
+            Do not return raw newlines inside JSON strings.
 
             Respond in EXACTLY this JSON format, nothing else:
             {jsonFormat}

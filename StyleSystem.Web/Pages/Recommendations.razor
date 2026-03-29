@@ -149,7 +149,7 @@
                 .ToList() ?? new List<string>();
 
             RecommendationState.SetResult(result.RecommendationText, images);
-            Navigation.NavigateTo("results");
+            Navigation.NavigateTo("authresults");
         }
         catch (Exception ex)
         {

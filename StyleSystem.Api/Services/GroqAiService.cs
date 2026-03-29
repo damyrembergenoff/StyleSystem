@@ -48,9 +48,8 @@ public class GroqAiService(
         }
 
         var result = await response.Content.ReadFromJsonAsync<GroqResponse>(cancellationToken: cancellationToken);
-        
         return result?.Choices?.FirstOrDefault()?.Message?.Content 
-               ?? throw new Exception("No response from Groq AI");
+            ?? throw new Exception("No response from Groq AI");
     }
 
     // Response models
