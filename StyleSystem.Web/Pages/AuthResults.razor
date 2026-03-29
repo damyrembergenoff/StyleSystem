@@ -1,10 +1,12 @@
-@page "/results"
-@layout MainLayout
+@page "/results/{id}"   
+@layout AuthenticatedLayout
+@attribute [Authorize]
 
 @inject NavigationManager Navigation
 @inject StyleSystem.Web.Services.RecommendationStateService RecommendationState
 @inject StyleSystem.Web.Services.RecommendationApiService RecommendationApi
 @using System.Net.Http.Json
+@using Microsoft.AspNetCore.Authorization
 @using StyleSystem.Web.Components
 @using StyleSystem.Web.Services
 
@@ -114,6 +116,7 @@
 </div>
 
 @code {
+    [Parameter] public string? Id { get; set; }
     [Inject] public required IConfiguration Configuration { get; set; }
 
     private bool isLoading = true;
@@ -123,11 +126,12 @@
     private string? recommendationText;
     private List<string> imageUrls = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         try
         {
-            LoadAnonymousResult();
+            if (!string.IsNullOrEmpty(Id))
+                await LoadAuthenticatedResult(Id);
         }
         catch (Exception ex)
         {
@@ -139,17 +143,25 @@
         }
     }
 
-    private void LoadAnonymousResult()
+    private async Task LoadAuthenticatedResult(string id)
     {
-        if (!RecommendationState.HasResult)
+        try
         {
-            Navigation.NavigateTo("");
-            return;
+            var response = await RecommendationApi.GetByIdAsync(Guid.Parse(id));
+            if (response != null)
+            {
+                recommendationText = response.RecommendationText;
+                imageUrls = response.Images.Select(i => i.ImageUrl ?? "").ToList();
+            }
+            else
+            {
+                errorMessage = "Recommendation not found";
+            }
         }
-
-        recommendationText = RecommendationState.RecommendationText;
-        imageUrls          = RecommendationState.ImageUrls;
-        RecommendationState.Clear();
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to load recommendation: {ex.Message}";
+        }
     }
 
     private string GetFullImageUrl(string url)
@@ -166,6 +178,6 @@
     private void GoBack()
     {
         RecommendationState.Clear();
-        Navigation.NavigateTo("");
+        Navigation.NavigateTo("dashboard");
     }
 }
