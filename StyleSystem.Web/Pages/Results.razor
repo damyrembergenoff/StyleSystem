@@ -114,6 +114,7 @@
 
 @code {
     [Parameter] public string? Id { get; set; }
+    [Inject] public required IConfiguration Configuration { get; set; }
 
     private bool isLoading = true;
     private string? errorMessage;
@@ -181,9 +182,11 @@
 
     private string GetFullImageUrl(string url)
     {
+        string webApiAddress = Configuration.GetValue<string>("WebApiAddress") ?? string.Empty;
+
         if (string.IsNullOrWhiteSpace(url)) return string.Empty;
         if (url.StartsWith("http://") || url.StartsWith("https://")) return url;
-        return $"http://localhost:5000/{url.TrimStart('/')}";
+        return $"{webApiAddress}/{url.TrimStart('/')}";
     }
 
     private void SelectOutfit(int index) => selectedOutfit = index;

@@ -160,6 +160,7 @@
 
 @code {
     [Inject] public required AuthenticationStateProvider AuthStateProvider { get; set; }
+    [Inject] public required IConfiguration Configuration { get; set; }
     private string userName = "";
     
     private DashboardDto? dashboardData;
@@ -186,8 +187,10 @@
 
     private string GetFullImageUrl(string url)
     {
+        string webApiAddress = Configuration.GetValue<string>("WebApiAddress") ?? string.Empty;
+
         if (string.IsNullOrWhiteSpace(url)) return string.Empty;
         if (url.StartsWith("http://") || url.StartsWith("https://")) return url;
-        return $"http://localhost:5000/{url.TrimStart('/')}";
+        return $"{webApiAddress}/{url.TrimStart('/')}";
     }
 }
