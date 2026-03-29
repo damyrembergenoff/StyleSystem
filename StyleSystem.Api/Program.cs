@@ -95,7 +95,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowedOrigins");
+app.UseCors("AllowFrontend");
 
 app.UseStaticFiles();
 

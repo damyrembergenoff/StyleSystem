@@ -24,6 +24,9 @@ jobs:
       - name: Publish Blazor WebAssembly
         run: dotnet publish StyleSystem.Web/StyleSystem.Web.csproj -c Release -o ./publish
 
+      - name: Check published files
+        run: ls -la ./publish/wwwroot/
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
