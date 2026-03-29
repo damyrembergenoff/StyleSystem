@@ -1,5 +1,5 @@
 @page "/authresults"   
-@page "/authresults/{id}"
+@page "/authresults/{id}"   
 @layout AuthenticatedLayout
 @attribute [Authorize]
 
@@ -117,6 +117,7 @@
 </div>
 
 @code {
+    [Parameter] public string? Id { get; set; }
     [Inject] public required IConfiguration Configuration { get; set; }
 
     private bool isLoading = true;
@@ -126,11 +127,15 @@
     private string? recommendationText;
     private List<string> imageUrls = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         try
         {
-            LoadAnonymousResult();
+            if (!string.IsNullOrEmpty(Id))
+                await LoadAuthenticatedResult(Id);
+            
+            else
+                LoadAnonymousResult();
         }
         catch (Exception ex)
         {
@@ -146,13 +151,34 @@
     {
         if (!RecommendationState.HasResult)
         {
-            Navigation.NavigateTo("");
+            Navigation.NavigateTo("dashboard");
             return;
         }
 
         recommendationText = RecommendationState.RecommendationText;
         imageUrls          = RecommendationState.ImageUrls;
         RecommendationState.Clear();
+    }
+
+    private async Task LoadAuthenticatedResult(string id)
+    {
+        try
+        {
+            var response = await RecommendationApi.GetByIdAsync(Guid.Parse(id));
+            if (response != null)
+            {
+                recommendationText = response.RecommendationText;
+                imageUrls = response.Images.Select(i => i.ImageUrl ?? "").ToList();
+            }
+            else
+            {
+                errorMessage = "Recommendation not found";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to load recommendation: {ex.Message}";
+        }
     }
 
     private string GetFullImageUrl(string url)
@@ -169,6 +195,6 @@
     private void GoBack()
     {
         RecommendationState.Clear();
-        Navigation.NavigateTo("");
+        Navigation.NavigateTo("dashboard");
     }
 }
