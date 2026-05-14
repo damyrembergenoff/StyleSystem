@@ -150,6 +150,7 @@ body {
   padding: var(--spacing-2xl);
   box-shadow: var(--shadow-2xl);
   margin-bottom: var(--spacing-2xl);
+  text-align: left;
 }
 
 .input-group {
@@ -170,6 +171,9 @@ body {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-lg);
+  max-width: 500px;
+  margin: var(--spacing-lg) auto 0 auto;
+  width: 100%;
 }
 
 .gender-option {
@@ -217,15 +221,20 @@ body {
 
 /* Body Type Section */
 .body-type-section {
-  background: var(--gray-50);
-  padding: var(--spacing-xl);
-  border-radius: var(--radius-xl);
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  text-align: left;
+  align-self: stretch;
 }
 
 .body-type-reference {
   margin-bottom: var(--spacing-xl);
   background: var(--white);
-  padding: var(--spacing-lg);
+  padding: var(--spacing-sm);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-sm);
 }
@@ -233,15 +242,16 @@ body {
 .body-types-image {
   width: 100%;
   height: auto;
-  max-height: 400px;
+  max-height: 500px;
   object-fit: contain;
   display: block;
 }
 
 .body-type-options {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));  /* bu qoladi */
   gap: var(--spacing-md);
+  width: 100%;        /* yangi */
 }
 
 .body-type-radio {
@@ -335,11 +345,26 @@ body {
   }
 
   .gender-selection {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .body-types-image {
-    max-height: 300px;
+    max-height: none;
+    min-height: unset;
+    width: 100%;
+    height: auto;
+  }
+
+  .body-type-reference {
+    padding: var(--spacing-xs);
+    overflow-x: visible;
+  }
+
+  .body-type-section {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    align-self: stretch;
   }
 
   .body-type-options {
@@ -399,18 +424,6 @@ body {
   align-items: center;
 }
 
-/* === MAIN CONTENT === */
-.landing-content {
-  position: relative;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 73px); /* Account for navbar */
-  padding: var(--spacing-2xl) var(--spacing-lg);
-  text-align: center;
-}
 
 .hero-title {
   font-size: 3.5rem;
@@ -1361,16 +1374,17 @@ body {
 .outfit-image-wrapper {
   position: relative;
   width: 100%;
-  height: 450px;
-  overflow: hidden;
+  height: auto;
+  overflow: visible;
   background: var(--gray-100);
 }
 
 .outfit-image {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
   transition: transform var(--transition-slow);
+  display: block;
 }
 
 .outfit-card:hover .outfit-image {
