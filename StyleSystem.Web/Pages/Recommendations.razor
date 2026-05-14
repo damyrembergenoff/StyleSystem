@@ -11,8 +11,8 @@
     <div class="recommendations-page-content">
         <!-- Page Header -->
         <div class="page-header-compact">
-            <h1 class="page-title-compact">Get New Style Recommendations ✨</h1>
-            <p class="page-subtitle-compact">Fill in just a few details and we&apos;ll do the rest.</p>
+            <h1 class="page-title-compact">Jańa Stil Usınısların Alıw ✨</h1>
+            <p class="page-subtitle-compact">Tek birneshe maǵlıwmatlardı toltırıń, qalǵanın biz isleymiz.</p>
         </div>
 
         <!-- Form Container -->
@@ -20,48 +20,48 @@
             <form @onsubmit="HandleGenerate" @onsubmit:preventDefault>
                 <!-- Destination -->
                 <div class="input-group fade-in">
-                    <label for="occasion" class="input-label">Where are you going? *</label>
+                    <label for="occasion" class="input-label">Qayaqqa barmaqshısız? *</label>
                     <input 
                         type="text" 
                         @bind="occasion" 
                         id="occasion" 
                         class="input-field" 
-                        placeholder="e.g., Wedding, Office, Casual outing, Gym..."
+                        placeholder="máselen, Toy, Ofis, Kúndelikli shıǵıw, Sport zalı..."
                     />
                 </div>
 
                 <!-- Season -->
                 <div class="input-group fade-in">
-                    <label for="season" class="input-label">Season *</label>
+                    <label for="season" class="input-label">Máwsim *</label>
                     <select @bind="selectedSeason" id="season" class="input-field input-select">
-                        <option value="">Select season</option>
-                        <option value="Spring">🌸 Spring</option>
-                        <option value="Summer">☀️ Summer</option>
-                        <option value="Fall">🍂 Fall</option>
-                        <option value="Winter">❄️ Winter</option>
+                        <option value="">Máwsimdi tanlań</option>
+                        <option value="Spring">🌸 Ba'ha'r</option>
+                        <option value="Summer">☀️ Jaz</option>
+                        <option value="Fall">🍂 Gu'z</option>
+                        <option value="Winter">❄️ Qıs</option>
                     </select>
                 </div>
 
                 <!-- Temperature -->
                 <div class="input-group fade-in">
-                    <label for="temperature" class="input-label">Temperature *</label>
+                    <label for="temperature" class="input-label">Temperatura *</label>
                     <select @bind="selectedTemperature" id="temperature" class="input-field input-select">
-                        <option value="">Select temperature</option>
-                        <option value="Hot">🌡️ Hot (25°C+)</option>
-                        <option value="Warm">☀️ Warm (18-25°C)</option>
-                        <option value="Cool">🌤️ Cool (10-18°C)</option>
-                        <option value="Cold">❄️ Cold (below 10°C)</option>
+                        <option value="">Temperaturanı tanlań</option>
+                        <option value="Hot">🌡️ Íssı (25°C+)</option>
+                        <option value="Warm">☀️ Jıllı (18-25°C)</option>
+                        <option value="Cool">🌤️ Salqın (10-18°C)</option>
+                        <option value="Cold">❄️ Suwıq (10°C dan to'men)</option>
                     </select>
                 </div>
 
                 <!-- Additional Preferences -->
                 <div class="input-group fade-in">
-                    <label for="preferences" class="input-label">Additional Preferences (Optional)</label>
+                    <label for="preferences" class="input-label">Qosımsha parametrler (ma'jbu'riy emes)</label>
                     <textarea 
                         @bind="additionalPreferences" 
                         id="preferences" 
                         class="input-field input-textarea" 
-                        placeholder="Tell us more about your style preferences, colors you like, comfort requirements, etc."
+                        placeholder="Stil qálewlerińiz, sizge unaytuǵın reńler, qolaylıq talapları hám basqalar haqqında kóbirek aytıp beriń."
                         rows="3"
                     ></textarea>
                 </div>
@@ -69,20 +69,20 @@
                 <!-- Generate Button -->
                 <div class="form-actions-center">
                     <button type="button" class="btn btn-outline btn-large" @onclick="GoBack">
-                        Cancel
+                        Biykarlaw
                     </button>
                     <button type="submit" class="btn btn-generate btn-large" disabled="@(!IsFormValid() || isLoading)">
                         @if (isLoading)
                         {
                             <div class="spinner"></div>
-                            <span>Generating...</span>
+                            <span>Jaratılmaqta...</span>
                         }
                         else
                         {
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                             </svg>
-                            <span>Generate Recommendations</span>
+                            <span>Usınıslar Jaratıw</span>
                         }
                     </button>
                 </div>
@@ -116,7 +116,7 @@
     {
         if (!IsFormValid())
         {
-            errorMessage = "Please fill in all required fields.";
+            errorMessage = "Iltimas barlıq kerekli maydanlardı toltırıń.";
             return;
         }
 
@@ -139,7 +139,7 @@
 
             if (result == null)
             {
-                errorMessage = "Failed to generate recommendation.";
+                errorMessage = "Usınıs jaratılmadı.";
                 return;
             }
 
@@ -153,7 +153,7 @@
         }
         catch (Exception ex)
         {
-            errorMessage = $"Failed to generate recommendations: {ex.Message}";
+            errorMessage = $"Usınıslar jaratılmadı: {ex.Message}";
         }
         finally
         {

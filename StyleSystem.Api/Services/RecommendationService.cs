@@ -14,6 +14,7 @@ public class RecommendationService(
     ITextAiService textAiService,
     IImageAiService imageAiService,
     IImageStorageService imageStorageService,
+    ITranslateService translateService,
     ILogger<RecommendationService> logger
 ) : IRecommendationService
 {
@@ -28,19 +29,21 @@ public class RecommendationService(
         var user = await context.Users
             .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken)
             ?? throw new Exception("User not found");
+        
+        var translatedDto = await translateService.TranslateRecommendationInputAsync(dto, cancellationToken);
 
         // 2. Entity yaratish
         var recommendation = new Recommendation
         {
             UserId = userId,
-            Occasion = dto.Occasion,
-            Season = dto.Season,
-            Temperature = dto.Temperature,
-            AdditionalPreferences = dto.AdditionalPreferences,
+            Occasion = translatedDto.Occasion,
+            Season = translatedDto.Season,
+            Temperature = translatedDto.Temperature,
+            AdditionalPreferences = translatedDto.AdditionalPreferences,
         };
 
         // 3. AI #1 - Text prompt tuzib, recommendation olish
-        var textPrompt = BuildTextPrompt(user, dto);
+        var textPrompt = BuildTextPrompt(user, translatedDto);
         var rawResponse = await textAiService
             .GenerateRecommendationAsync(textPrompt, cancellationToken);
 
@@ -52,7 +55,11 @@ public class RecommendationService(
         var fashionResponse = JsonSerializer.Deserialize<FashionAiResponse>(cleaned)
             ?? throw new Exception("Failed to parse Groq response");
 
-        recommendation.RecommendationText = fashionResponse.Recommendation;
+        logger.LogInformation("Started translating {text} to karakalpak from english", fashionResponse.Recommendation);
+        var translatedText = await translateService.TranslateAsync(fashionResponse.Recommendation!, cancellationToken);
+
+        recommendation.RecommendationText = translatedText;
+        logger.LogInformation("Translation completed: {translatedText}", translatedText);
 
         var imageBytes = await imageAiService.GenerateImagesAsync(fashionResponse.ImagePrompt!, count: 2, cancellationToken: cancellationToken);
 
@@ -84,7 +91,8 @@ public class RecommendationService(
         CancellationToken cancellationToken = default)
     {
         // 1. AI #1 - Text prompt tuzib, recommendation olish
-        var prompt = BuildAnonymousTextPrompt(dto);
+        var translatedDto = await translateService.TranslateInputAsync(dto, cancellationToken);
+        var prompt = BuildAnonymousTextPrompt(translatedDto);
         var rawResponse = await textAiService
             .GenerateRecommendationAsync(prompt, cancellationToken);
         
@@ -111,10 +119,17 @@ public class RecommendationService(
             imageUrls.Add(imageUrl);
         }
 
+        logger.LogInformation("Started translating {text} to karakalpak from english", fashionResponse.Recommendation);
+        
+        var translatedText = await translateService.TranslateAsync(fashionResponse.Recommendation!, cancellationToken);
+        
+        logger.LogInformation("Translation completed: {translatedText}", translatedText);
+
+
         // 4. Response qaytarish (DB ga saqlanmaydi)
         return new AnonymousRecommendationResponseDto
         {
-            RecommendationText = fashionResponse.Recommendation,
+            RecommendationText = translatedText,
             ImageUrls = imageUrls
         };
     }

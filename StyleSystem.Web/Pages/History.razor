@@ -3,15 +3,15 @@
 
 <div class="history-container">
     <div class="history-header">
-        <h1 class="page-title">Your Recommendation History</h1>
-        <p class="page-subtitle">View your past style recommendations</p>
+        <h1 class="page-title">Usınıslar tariyxıńız</h1>
+        <p class="page-subtitle">Ótken stil usınıslarıńızdı kóriw</p>
     </div>
 
     @if (isLoading)
     {
         <div class="loading-state">
             <div class="spinner"></div>
-            <p>Loading your history...</p>
+            <p>Tariyxıńız júklenbekte...</p>
         </div>
     }
     else if (recommendations.Count == 0)
@@ -22,9 +22,9 @@
                     <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
             </div>
-            <h3>No recommendations yet</h3>
-            <p>Create your first style recommendation to see it here.</p>
-            <button class="btn btn-primary" @onclick="NavigateToRecommendations">Get Started</button>
+            <h3>Ele usınıslar joq</h3>
+            <p>Usı jerde kóriw ushın birinshi stil usınısın dúziń.</p>
+            <button class="btn btn-primary" @onclick="NavigateToRecommendations">Baslaw</button>
         </div>
     }
     else

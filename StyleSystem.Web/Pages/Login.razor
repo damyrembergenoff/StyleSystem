@@ -14,8 +14,8 @@
         </div>
 
         <!-- Title -->
-        <h2 class="auth-title">Welcome Back</h2>
-        <p class="auth-subtitle">Sign in to your account to continue</p>
+        <h2 class="auth-title">Xosh keldińiz!</h2>
+        <p class="auth-subtitle">Dawam etiw ushın akkauntıńızg'a kiriń.</p>
 
         <!-- Login Form -->
         <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
@@ -35,7 +35,7 @@
 
             <!-- Password -->
             <div class="input-group">
-                <label for="password">Password</label>
+                <label for="password">Parol</label>
                 <InputText 
                     @bind-Value="loginModel.Password" 
                     id="password" 
@@ -58,19 +58,19 @@
             <button type="submit" class="btn btn-primary btn-large btn-full" disabled="@isLoading">
                 @if (isLoading)
                 {
-                    <span>Signing in...</span>
+                    <span>Kirilmekte...</span>
                 }
                 else
                 {
-                    <span>Sign In</span>
+                    <span>Kiriw</span>
                 }
             </button>
         </EditForm>
 
         <!-- Sign Up Link -->
         <p class="text-center" style="margin-top: 1.5rem; color: #6b7280; font-size: 0.875rem;">
-            Don't have an account? 
-            <a href="register" class="auth-link">Sign up</a>
+            Akkauntıńız joqpa? 
+            <a href="register" class="auth-link">Dizimnen ótiw</a>
         </p>
     </div>
 </div>

@@ -6,8 +6,8 @@
     <div class="profile-card fade-in">
         <!-- Header -->
         <div class="profile-header">
-            <h1 class="profile-title">Complete Your Profile</h1>
-            <p class="profile-subtitle">Help us personalize your style recommendations</p>
+            <h1 class="profile-title">Profildi tolıqtırıw</h1>
+            <p class="profile-subtitle">Stil usınıslarıńızdı beyimlestiriwge járdemlesiń.</p>
             <div class="progress-bar">
                 <div class="progress-fill" style="width: @GetProgressPercentage()%"></div>
             </div>
@@ -20,41 +20,41 @@
             @if (currentStep == 1)
             {
                 <div class="form-section">
-                    <h3 class="section-title">Personal Information</h3>
+                    <h3 class="section-title">Jeke maǵlıwmatlar</h3>
                     
                     <!-- Full Name -->
                     <div class="input-group">
-                        <label>Full Name</label>
+                        <label>Tolıq atıńız</label>
                         <InputText @bind-Value="profileModel.FullName" 
                                    class="input-field" 
-                                   placeholder="Enter your full name" />
+                                   placeholder="Tolıq atıńızdı kirgiziń" />
                         <ValidationMessage For="@(() => profileModel.FullName)" />
                     </div>
 
                     <!-- Height -->
                     <div class="input-group">
-                        <label>Height (cm)</label>
+                        <label>Boyıńız (sm)</label>
                         <InputNumber @bind-Value="profileModel.Height" 
                                      class="input-field" 
-                                     placeholder="e.g., 175" />
+                                     placeholder="mısalı, 175" />
                         <ValidationMessage For="@(() => profileModel.Height)" />
                     </div>
 
                     <!-- Weight -->
                     <div class="input-group">
-                        <label>Weight (kg)</label>
+                        <label>Salmaǵıńız (kg)</label>
                         <InputNumber @bind-Value="profileModel.Weight" 
                                      class="input-field" 
-                                     placeholder="e.g., 70" />
+                                     placeholder="mısalı, 70" />
                         <ValidationMessage For="@(() => profileModel.Weight)" />
                     </div>
 
                     <!-- Age -->
                     <div class="input-group">
-                        <label>Age</label>
+                        <label>Jasıńız</label>
                         <InputNumber @bind-Value="profileModel.Age" 
                                      class="input-field" 
-                                     placeholder="e.g., 30" />
+                                     placeholder="mısalı, 30" />
                         <ValidationMessage For="@(() => profileModel.Weight)" />
                     </div>
                 </div>
@@ -64,25 +64,25 @@
             @if (currentStep == 2)
             {
                 <div class="form-section">
-                    <h3 class="section-title">Select Your Gender</h3>
+                    <h3 class="section-title">Jınısıńızdı tańlań</h3>
                     
                     <div class="gender-selection">
                         <div class="gender-card @(profileModel.Gender == "Male" ? "selected" : "")" 
                              @onclick="SelectMaleGender">
                         <div class="gender-icon">♂</div>
-                        <div class="gender-label">Male</div>
+                        <div class="gender-label">Erkek</div>
                         </div>
                         
                         <div class="gender-card @(profileModel.Gender == "Female" ? "selected" : "")" 
                              @onclick="SelectFemaleGender">
                             <div class="gender-icon">♀</div>
-                            <div class="gender-label">Female</div>
+                            <div class="gender-label">Hayal</div>
                         </div>
                     </div>
 
                     @if (string.IsNullOrEmpty(profileModel.Gender))
                     {
-                        <p class="error-text">Please select your gender</p>
+                        <p class="error-text">Iltimas jınısıńızdı tańlań</p>
                     }
                 </div>
             }
@@ -91,8 +91,8 @@
             @if (currentStep == 3)
             {
                 <div class="form-section">
-                    <h3 class="section-title">Select Your Body Type</h3>
-                    <p class="section-description">Choose the body type that best matches your physique</p>
+                    <h3 class="section-title">Dene tipinizdi tańlań</h3>
+                    <p class="section-description">Dene dúzilisińizge say gewde túrin tańlań</p>
 
                     <!-- Bitta umumiy rasm -->
                     <div class="body-type-reference-image">
@@ -134,7 +134,7 @@
 
                     @if (string.IsNullOrEmpty(profileModel.BodyType))
                     {
-                        <p class="error-text">Please select your body type</p>
+                        <p class="error-text">Iltimas dene tipinizdi tańlań</p>
                     }
                 </div>
             }
@@ -143,8 +143,8 @@
             @if (currentStep == 4)
             {
                 <div class="form-section">
-                    <h3 class="section-title">Select Your Skin Tone</h3>
-                    <p class="section-description">This helps us recommend colors that complement you</p>
+                    <h3 class="section-title">Teri reńin tańlań.</h3>
+                    <p class="section-description">Bul sizge sáykes keletuǵın reńlerdi usınıs etiwge járdem beredi</p>
                     
                     <div class="skin-tone-grid">
                         @foreach (var tone in skinTones)
@@ -159,7 +159,7 @@
 
                     @if (string.IsNullOrEmpty(profileModel.SkinTone))
                     {
-                        <p class="error-text">Please select your skin tone</p>
+                        <p class="error-text">Iltimas teri reńin tańlań.</p>
                     }
                 </div>
             }
@@ -199,11 +199,11 @@
                     <button type="submit" class="btn btn-primary" disabled="@isLoading">
                         @if (isLoading)
                         {
-                            <span>Saving...</span>
+                            <span>Saqlanbaqta...</span>
                         }
                         else
                         {
-                            <span>Complete Profile</span>
+                            <span>Profildi tolıqtırıw</span>
                         }
                     </button>
                 }

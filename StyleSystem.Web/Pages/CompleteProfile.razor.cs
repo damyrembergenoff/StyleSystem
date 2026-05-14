@@ -39,31 +39,31 @@ public partial class CompleteProfile
         { 
             Value = "Rectangle", 
             Name = "Rectangle", 
-            Description = "Straight body, similar waist and shoulder width"
+            Description = "Dúziw dene, bel hám iyin keńligi birdey."
         },
         new BodyTypeOption 
         { 
             Value = "Triangle", 
             Name = "Triangle", 
-            Description = "Wider hips, narrower shoulders"
+            Description = "Jambasları keńirek, iyinleri tar"
         },
         new BodyTypeOption 
         { 
             Value = "InvertedTriangle", 
             Name = "Inverted Triangle", 
-            Description = "Broad shoulders, narrow waist"
+            Description = "Iyinleri keń, beli tar."
         },
         new BodyTypeOption 
         { 
             Value = "Trapezoid", 
             Name = "Trapezoid", 
-            Description = "Athletic build, shoulders slightly wider than hips"
+            Description = "Atletik deneli, iyinleri jambasqa qaraganda biraz keńirek."
         },
         new BodyTypeOption 
         { 
             Value = "Oval", 
             Name = "Oval", 
-            Description = "Round midsection, slim limbs"
+            Description = "Orta bólimi domalaq, ayaq-qolları jińishke."
         }
     };
 
@@ -73,49 +73,49 @@ public partial class CompleteProfile
         { 
             Value = "Hourglass", 
             Name = "Hourglass", 
-            Description = "Balanced bust and hips, defined waist"
+            Description = "Balanstırılǵan kókirek hám jambas, bel belgilengen."
         },
         new BodyTypeOption 
         { 
             Value = "Pear", 
             Name = "Pear", 
-            Description = "Wider hips, smaller bust"
+            Description = "jambas keńirek, kókirek kishirek"
         },
         new BodyTypeOption 
         { 
             Value = "Apple", 
             Name = "Apple", 
-            Description = "Wider midsection, slim legs"
+            Description = "Orta bólimi keń, ayaqları jinishke."
         },
         new BodyTypeOption 
         { 
             Value = "Rectangle", 
             Name = "Rectangle", 
-            Description = "Straight figure, similar measurements"
+            Description = "Tuwrı figura, uqsas ólshemler"
         },
         new BodyTypeOption 
         { 
             Value = "InvertedTriangle", 
             Name = "Inverted Triangle", 
-            Description = "Broad shoulders, narrow hips"
+            Description = "Keń jawırın, tar jambas."
         },
         new BodyTypeOption 
         { 
             Value = "Diamond", 
             Name = "Diamond", 
-            Description = "Wider midsection, slimmer top and bottom"
+            Description = "Orta bólimi keńirek, tóbesi hám astı jińishke."
         }
     };
 
     // Skin Tones
     private List<SkinToneOption> skinTones = new()
     {
-        new SkinToneOption { Value = "Fair", Name = "Fair", Color = "#FFE0BD" },
-        new SkinToneOption { Value = "Light", Name = "Light", Color = "#F1C27D" },
-        new SkinToneOption { Value = "Medium", Name = "Medium", Color = "#C68642" },
-        new SkinToneOption { Value = "Olive", Name = "Olive", Color = "#8D5524" },
-        new SkinToneOption { Value = "Tan", Name = "Tan", Color = "#704214" },
-        new SkinToneOption { Value = "Dark", Name = "Dark", Color = "#4A2511" }
+        new SkinToneOption { Value = "Fair", Name = "Aq", Color = "#FFE0BD" },
+        new SkinToneOption { Value = "Light", Name = "Ashıq", Color = "#F1C27D" },
+        new SkinToneOption { Value = "Medium", Name = "Ortasha", Color = "#C68642" },
+        new SkinToneOption { Value = "Olive", Name = "Zaytun", Color = "#8D5524" },
+        new SkinToneOption { Value = "Tan", Name = "qońır", Color = "#704214" },
+        new SkinToneOption { Value = "Dark", Name = "Qara", Color = "#4A2511" }
     };
 
     private void SelectMaleGender() => SelectGender("Male");
@@ -148,7 +148,7 @@ public partial class CompleteProfile
                 !profileModel.Height.HasValue || 
                 !profileModel.Weight.HasValue)
             {
-                errorMessage = "Please fill in all fields";
+                errorMessage = "Iltimas barlıq maydanlardı toltırıń";
                 return;
             }
         }
@@ -156,7 +156,7 @@ public partial class CompleteProfile
         {
             if (string.IsNullOrEmpty(profileModel.Gender))
             {
-                errorMessage = "Please select your gender";
+                errorMessage = "Iltimas jınısıńızdı tańlań";
                 return;
             }
         }
@@ -164,7 +164,7 @@ public partial class CompleteProfile
         {
             if (string.IsNullOrEmpty(profileModel.BodyType))
             {
-                errorMessage = "Please select your body type";
+                errorMessage = "Iltimas dene túrin tańlań.";
                 return;
             }
         }
@@ -196,7 +196,7 @@ public partial class CompleteProfile
         // Final validation
         if (string.IsNullOrEmpty(profileModel.SkinTone))
         {
-            errorMessage = "Please select your skin tone";
+            errorMessage = "Iltimas teri reńin tańlań.";
             return;
         }
 
@@ -215,18 +215,18 @@ public partial class CompleteProfile
             var isSuccess = await UserService.UpdateUserAsync(profileModel);
             if (isSuccess)
             {
-                successMessage = "Profile completed successfully! Redirecting...";
+                successMessage = "Profil tabıslı toltırıldı! Redirecting...";
                 Navigation.NavigateTo("dashboard");
             }
 
             else
             {
-                errorMessage = "Failed to save profile. Please try again.";
+                errorMessage = "Profil saqlanbadı. Iltimas qayta urınıń.";
             }
         }
         catch (Exception ex)
         {
-            errorMessage = $"{ex.Message} Failed to save profile. Please try again.";
+            errorMessage = $"{ex.Message} Profil saqlanbadı. Iltimas qayta urınıń.";
         }
         finally
         {

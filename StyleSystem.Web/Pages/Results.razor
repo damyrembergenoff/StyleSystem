@@ -13,14 +13,14 @@
     {
         <div class="loading-screen">
             <div class="loading-orb"></div>
-            <p class="loading-text">Creating your style recommendations...</p>
+            <p class="loading-text">Stil usınısları jaratılmaqta...</p>
         </div>
     }
     else if (!string.IsNullOrEmpty(errorMessage))
     {
         <div class="error-state">
             <p>@errorMessage</p>
-            <button class="btn btn-primary" @onclick="GoBack">Go Back</button>
+            <button class="btn btn-primary" @onclick="GoBack">Izge qaytıw</button>
         </div>
     }
     else
@@ -34,10 +34,10 @@
                 Back
             </button>
             <div class="header-info">
-                <h1 class="results-title">Your Style Recommendations ✨</h1>
+                <h1 class="results-title">Siziń stil usınıslarınız. ✨</h1>
             </div>
             <div class="header-actions">
-                <button class="btn btn-primary" @onclick="GoBack">New Recommendation</button>
+                <button class="btn btn-primary" @onclick="GoBack">Jańa usınıs</button>
             </div>
         </div>
 
@@ -50,7 +50,7 @@
                         <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                         </svg>
-                        AI Stylist Advice
+                        AI stilist másláháti
                     </div>
                 </div>
                 <div class="advice-content">
@@ -63,9 +63,9 @@
         @if (imageUrls.Any())
         {
             <div class="outfit-section">
-                <h2 class="section-heading">Recommended Outfits</h2>
+                <h2 class="section-heading">Usınıs etilgen kiyimler</h2>
                 <p class="section-description">
-                    Here are @imageUrls.Count curated outfit@(imageUrls.Count > 1 ? "s" : "") based on your preferences
+                    Aytqanlarıńızǵa tiykarlanıp islengen kiyimler
                 </p>
 
                 <div class="outfit-gallery">
@@ -94,9 +94,9 @@
         @if (string.IsNullOrEmpty(recommendationText) && !imageUrls.Any())
         {
             <div class="empty-state" style="text-align:center; padding: 4rem 2rem;">
-                <h3>No recommendation data found</h3>
-                <p>Please go back and generate a new recommendation.</p>
-                <button class="btn btn-primary" @onclick="GoBack">Try Again</button>
+                <h3>Usınıs maǵlıwmatları tabılmadı</h3>
+                <p>Iltimas arqaǵa qaytıń hám jańa usınıs jaratıń.</p>
+                <button class="btn btn-primary" @onclick="GoBack">Qayta urınıń</button>
             </div>
         }
 
@@ -107,7 +107,7 @@
                     <polyline points="23 4 23 10 17 10"></polyline>
                     <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
                 </svg>
-                New Recommendation
+                Jańa usınıs
             </button>
         </div>
     }
@@ -131,7 +131,7 @@
         }
         catch (Exception ex)
         {
-            errorMessage = $"Failed to load recommendation: {ex.Message}";
+            errorMessage = $"Usınıs júklenbedi: {ex.Message}";
         }
         finally
         {

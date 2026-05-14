@@ -9,8 +9,8 @@
     <!-- Page Header -->
     <div class="profile-header">
         <div class="header-left">
-            <h1 class="page-title">My Profile</h1>
-            <p class="page-subtitle">Manage your personal information and preferences</p>
+            <h1 class="page-title">Profilim</h1>
+            <p class="page-subtitle">Jeke maǵlıwmatlar hám parametrlerdi basqarıw</p>
         </div>
         <div class="header-right">
             @if (isEditing)
@@ -19,12 +19,12 @@
                 <button class="btn btn-primary" @onclick="SaveProfile" disabled="@isSaving">
                     @if (isSaving)
                     {
-                        <span>Saving...</span>
+                        <span>Saqlanbaqta...</span>
                         <div class="spinner"></div>
                     }
                     else
                     {
-                        <span>Save Changes</span>
+                        <span>Ózgerislerdi Saqlaw</span>
                     }
                 </button>
             }
@@ -35,7 +35,7 @@
                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                     </svg>
-                    Edit Profile
+                    Profildi Dúzetiw
                 </button>
             }
         </div>
@@ -80,11 +80,11 @@
 
                 <!-- Personal Information -->
                 <div class="form-section-card">
-                    <h3 class="section-card-title">Personal Information</h3>
+                    <h3 class="section-card-title">Jeke maǵlıwmatlar</h3>
                     
                     <div class="form-grid-profile">
                         <div class="form-group">
-                            <label class="form-label">Full Name</label>
+                            <label class="form-label">Tolıq atı</label>
                             @if (isEditing)
                             {
                                 <InputText @bind-Value="userProfile.FullName" class="form-input" placeholder="John Doe" />
@@ -99,38 +99,38 @@
                         <div class="form-group">
                             <label class="form-label">Username</label>
                             <div class="form-display-value readonly">@Username</div>
-                            <span class="form-hint">Username cannot be changed</span>
+                            <span class="form-hint">Username di ózgertiwge bolmaydı</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Body & Style Information -->
                 <div class="form-section-card">
-                    <h3 class="section-card-title">Body & Style Preferences</h3>
+                    <h3 class="section-card-title">Dene hám stil parametrleri</h3>
                     
                     <div class="form-grid-profile">
                         <div class="form-group">
-                            <label class="form-label">Gender</label>
+                            <label class="form-label">Jınıs</label>
                             @if (isEditing)
                             {
                                 <select @bind="userProfile.Gender" @onchanged="OnGenderChanged" class="form-select">
-                                    <option value="">Select gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
+                                    <option value="">Jınısıńızdı tanlań</option>
+                                    <option value="Male">Erkek</option>
+                                    <option value="Female">Hayal</option>
                                 </select>
                             }
                             else
                             {
-                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.Gender) ? "Not set" : userProfile.Gender)</div>
+                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.Gender) ? "Ornatilmag'an" : userProfile.Gender)</div>
                             }
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Body Type</label>
+                            <label class="form-label">Dene tipi</label>
                             @if (isEditing)
                             {
                                 <select @bind="userProfile.BodyType" class="form-select">
-                                    <option value="">Select body type</option>
+                                    <option value="">Dene túrin tańlań</option>
                                     @foreach (var option in availableBodyTypes)
                                     {
                                         <option value="@option">@option</option>
@@ -144,7 +144,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Age</label>
+                            <label class="form-label">Jas</label>
                             @if (isEditing)
                             {
                                 <InputNumber @bind-Value="userProfile.Age" class="form-input" placeholder="25" />
@@ -152,27 +152,27 @@
                             }
                             else
                             {
-                                <div class="form-display-value">@(userProfile.Age?.ToString() ?? "Not set")</div>
+                                <div class="form-display-value">@(userProfile.Age?.ToString() ?? "Ornatilmag'an")</div>
                             }
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Skin Tone</label>
+                            <label class="form-label">Teri reńi</label>
                             @if (isEditing)
                             {
                                 <select @bind="userProfile.SkinTone" class="form-select">
-                                    <option value="">Select skin tone</option>
-                                    <option value="Fair">Fair</option>
-                                    <option value="Light">Light</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="Olive">Olive</option>
-                                    <option value="Tan">Tan</option>
-                                    <option value="Dark">Dark</option>
+                                    <option value="">Teri reńin tańlań</option>
+                                    <option value="Fair">Aq</option>
+                                    <option value="Light">Ashıq</option>
+                                    <option value="Medium">Ortasha</option>
+                                    <option value="Olive">Zaytun</option>
+                                    <option value="Tan">Qońır</option>
+                                    <option value="Dark">Qara</option>
                                 </select>
                             }
                             else
                             {
-                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.SkinTone) ? "Not set" : userProfile.SkinTone)</div>
+                                <div class="form-display-value">@(string.IsNullOrEmpty(userProfile.SkinTone) ? "Ornatilmag'an" : userProfile.SkinTone)</div>
                             }
                         </div>
                     </div>
@@ -180,16 +180,16 @@
 
                 <!-- Account Settings -->
                 <div class="form-section-card">
-                    <h3 class="section-card-title">Account Settings</h3>
+                    <h3 class="section-card-title">Akkount parametrleri</h3>
                     
                     <div class="settings-list">
                         <div class="setting-item">
                             <div class="setting-info">
-                                <div class="setting-label">Password</div>
+                                <div class="setting-label">Parol</div>
                                 <div class="setting-description">••••••••</div>
                             </div>
                             <button type="button" class="btn btn-outline btn-sm" @onclick="ChangePassword">
-                                Change Password
+                                Paroldi ózgertiw
                             </button>
                         </div>
                     </div>
@@ -197,14 +197,14 @@
 
                 <!-- Danger Zone -->
                 <div class="form-section-card danger-zone">
-                    <h3 class="section-card-title">Danger Zone</h3>
+                    <h3 class="section-card-title">Qáwipli zona</h3>
                     <div class="danger-content">
                         <div class="danger-info">
-                            <div class="danger-label">Delete Account</div>
-                            <div class="danger-description">Permanently delete your account and all data</div>
+                            <div class="danger-label">Akkaunttı óshiriw</div>
+                            <div class="danger-description">Akkount hám barlıq maǵlıwmatlardı birotala óshiriw</div>
                         </div>
                         <button type="button" class="btn btn-danger" @onclick="DeleteAccount">
-                            Delete Account
+                            Akkaunttı óshiriw
                         </button>
                     </div>
                 </div>

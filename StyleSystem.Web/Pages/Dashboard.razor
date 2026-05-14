@@ -12,15 +12,15 @@
     <!-- Welcome Section -->
     <div class="dashboard-header">
         <div class="welcome-section">
-            <h1 class="dashboard-title">Welcome back, @userName! 👋</h1>
-            <p class="dashboard-subtitle">Ready to discover your perfect style for today?</p>
+            <h1 class="dashboard-title">Xosh keldińiz!, @userName! 👋</h1>
+            <p class="dashboard-subtitle">Búgin ózińizdiń jetik usılıńızdı tabıwǵa tayarsız ba?</p>
         </div>
         <div class="header-actions">
             <a href="recommendations" class="btn btn-primary btn-large">
                 <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                 </svg>
-                Get Style Recommendations
+                Stil usınısların alıw
             </a>
         </div>
     </div>
@@ -35,7 +35,7 @@
             </div>
             <div class="stat-content">
                 <div class="stat-value">@totalRecommendations</div>
-                <div class="stat-label">Total Recommendations</div>
+                <div class="stat-label">Jámi usınıslar</div>
             </div>
         </div>
 
@@ -51,7 +51,7 @@
             </div>
             <div class="stat-content">
                 <div class="stat-value">@thisMonth</div>
-                <div class="stat-label">This Month</div>
+                <div class="stat-label">Bul ay</div>
             </div>
         </div>
 
@@ -65,14 +65,14 @@
             </div>
             <div class="stat-content">
                 <div class="stat-value">85%</div>
-                <div class="stat-label">Profile Completeness</div>
+                <div class="stat-label">Profil tolıqlıǵı</div>
             </div>
         </div>
     </div>
 
     <!-- Quick Actions -->
     <div class="dashboard-section">
-        <h2 class="section-title">Quick Actions</h2>
+        <h2 class="section-title">Tez ámeller</h2>
         <div class="quick-actions-grid">
             <a href="recommendations" class="action-card">
                 <div class="action-icon primary">
@@ -80,8 +80,8 @@
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                     </svg>
                 </div>
-                <h3 class="action-title">New Recommendation</h3>
-                <p class="action-description">Get AI-powered outfit suggestions for any occasion</p>
+                <h3 class="action-title">Jańa usınıs</h3>
+                <p class="action-description">Hár qanday mánzil ushın AI járdeminde kiyim usınısların alıń.</p>
             </a>
 
             <a href="profile" class="action-card">
@@ -91,8 +91,8 @@
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                 </div>
-                <h3 class="action-title">Update Profile</h3>
-                <p class="action-description">Edit your style preferences and body type</p>
+                <h3 class="action-title">Profildi jańalaw</h3>
+                <p class="action-description">Stilińizdi hám gewde túrin ózgertiń.</p>
             </a>
 
             <a href="#" class="action-card" @onclick="@(() => showComingSoon = true)" @onclick:preventDefault>
@@ -102,8 +102,8 @@
                         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                     </svg>
                 </div>
-                <h3 class="action-title">Style Library</h3>
-                <p class="action-description">Browse and save outfit inspirations</p>
+                <h3 class="action-title">Stiller kitapxanası</h3>
+                <p class="action-description">Kiyim modaların kóriw hám saqlaw</p>
             </a>
         </div>
     </div>
@@ -111,8 +111,8 @@
     <!-- Recent Recommendations -->
     <div class="dashboard-section">
         <div class="section-header">
-            <h2 class="section-title">Recent Recommendations</h2>
-            <a href="history" class="section-link">View All →</a>
+            <h2 class="section-title">Sońǵı usınıslar</h2>
+            <a href="history" class="section-link">Hámmesin kóriw →</a>
         </div>
 
         @if (dashboardData?.RecentActivities?.Count > 0)
@@ -139,9 +139,9 @@
                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                     </svg>
                 </div>
-                <h3 class="empty-title">No recommendations yet</h3>
-                <p class="empty-description">Start by creating your first style recommendation!</p>
-                <a href="recommendations" class="btn btn-primary">Get Started</a>
+                <h3 class="empty-title">Házirshe usınıslar joq</h3>
+                <p class="empty-description">Birinshi stil usınısın jaratıwdan baslań!</p>
+                <a href="recommendations" class="btn btn-primary">Baslaw</a>
             </div>
         }
     </div>
@@ -152,9 +152,9 @@
 {
     <div class="modal-overlay" @onclick="@(() => showComingSoon = false)">
         <div class="modal-content" @onclick:stopPropagation>
-            <h3>Coming Soon! 🚀</h3>
-            <p>This feature is currently under development.</p>
-            <button class="btn btn-primary" @onclick="@(() => showComingSoon = false)">Got it</button>
+            <h3>Tez arada! 🚀</h3>
+            <p>Bul funkciya házirde islep shıǵılmaqta.</p>
+            <button class="btn btn-primary" @onclick="@(() => showComingSoon = false)">Túsinikli</button>
         </div>
     </div>
 }

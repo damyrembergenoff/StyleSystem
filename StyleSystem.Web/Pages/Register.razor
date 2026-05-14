@@ -14,8 +14,8 @@
         </div>
 
         <!-- Title -->
-        <h2 class="auth-title">Create Account</h2>
-        <p class="auth-subtitle">Sign up to get personalized style recommendations</p>
+        <h2 class="auth-title">Akkount Jaratıw</h2>
+        <p class="auth-subtitle">Jeke stil usınısların alıw ushın dizimnen ótiń</p>
 
         <!-- Register Form -->
         <EditForm Model="@registerModel" OnValidSubmit="HandleRegister">
@@ -23,7 +23,7 @@
 
             <!-- Full Name -->
             <div class="input-group">
-                <label for="fullName">Full Name</label>
+                <label for="fullName">Tolıq atı</label>
                 <InputText 
                     @bind-Value="registerModel.FullName" 
                     id="fullName" 
@@ -47,7 +47,7 @@
 
             <!-- Password -->
             <div class="input-group">
-                <label for="password">Password</label>
+                <label for="password">Parol</label>
                 <InputText 
                     @bind-Value="registerModel.Password" 
                     id="password" 
@@ -57,13 +57,13 @@
                 />
                 <ValidationMessage For="@(() => registerModel.Password)" style="color: #ef4444; font-size: 0.875rem; margin-top: 0.25rem;" />
                 <p style="font-size: 0.75rem; color: #6b7280; margin-top: 0.25rem;">
-                    Must be at least 6 characters
+                    Keminde 6 belgiden ibarat bolıwı kerek
                 </p>
             </div>
 
             <!-- Confirm Password -->
             <div class="input-group">
-                <label for="confirmPassword">Confirm Password</label>
+                <label for="confirmPassword">Paroldi tastıyıqlaw</label>
                 <InputText 
                     @bind-Value="registerModel.ConfirmPassword" 
                     id="confirmPassword" 
@@ -94,19 +94,19 @@
             <button type="submit" class="btn btn-primary btn-large btn-full" disabled="@isLoading">
                 @if (isLoading)
                 {
-                    <span>Creating account...</span>
+                    <span>Akkount Jaratılmaqta...</span>
                 }
                 else
                 {
-                    <span>Create Account</span>
+                    <span>Akkount Jaratıw</span>
                 }
             </button>
         </EditForm>
 
         <!-- Login Link -->
         <p class="text-center" style="margin-top: 1.5rem; color: #6b7280; font-size: 0.875rem;">
-            Already have an account? 
-            <a href="login" class="auth-link">Sign in</a>
+            Sizde álleqashan akkount bar ma? 
+            <a href="login" class="auth-link">Kiriw</a>
         </p>
     </div>
 </div>

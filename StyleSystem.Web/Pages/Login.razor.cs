@@ -18,7 +18,7 @@ public partial class Login
 
         if (string.IsNullOrWhiteSpace(loginModel.Username) || string.IsNullOrWhiteSpace(loginModel.Password))
         {
-            errorMessage = "Please fill in all fields.";
+            errorMessage = "Barlıq maydanlardı toltırıń.";
             isLoading = false;
             return;
         }
@@ -31,7 +31,7 @@ public partial class Login
         }
         else
         {
-            errorMessage = "Invalid username or password.";
+            errorMessage = "Username yamasa parol nadurıs.";
         }
 
         isLoading = false;

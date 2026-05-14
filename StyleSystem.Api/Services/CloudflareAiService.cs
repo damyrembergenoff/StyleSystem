@@ -48,7 +48,6 @@ public class CloudflareAiService(
         };
 
         using var request = new HttpRequestMessage(HttpMethod.Post, url);
-        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
         request.Content = new StringContent(
             JsonSerializer.Serialize(requestBody),
             Encoding.UTF8,

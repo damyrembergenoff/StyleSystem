@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using Microsoft.Extensions.Options;
 using StyleSystem.Api.Abstractions;
 using StyleSystem.Api.Options;
@@ -7,8 +6,7 @@ namespace StyleSystem.Api.Services;
 
 public class GroqAiService(
     HttpClient httpClient, 
-    IOptions<GroqOptions> options,
-    IConfiguration configuration) : ITextAiService
+    IOptions<GroqOptions> options) : ITextAiService
 {
 
     public async Task<string> GenerateRecommendationAsync(string prompt, CancellationToken cancellationToken = default)
@@ -31,9 +29,6 @@ public class GroqAiService(
             },
             temperature = 0.7
         };
-
-        httpClient.DefaultRequestHeaders.Authorization = 
-            new AuthenticationHeaderValue("Bearer", configuration["Groq:ApiKey"]);
         
         var response = await httpClient.PostAsJsonAsync(
             options.Value.BaseUrl,

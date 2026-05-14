@@ -22,7 +22,7 @@ public partial class Register
         {
             if (registerModel.Password != registerModel.ConfirmPassword)
             {
-                errorMessage = "Passwords do not match.";
+                errorMessage = "Parollar sáykes kelmeydi.";
                 isLoading = false;
                 return;
             }
@@ -32,17 +32,17 @@ public partial class Register
 
             if(isRegistered)
             {
-                successMessage = "Account created successfully! Redirecting to complete profile...";
+                successMessage = "Akkount jaratıldı! Profildi toltırıwǵa ótkerilmekte...";
                 Navigation.NavigateTo("complete-profile");
             }
             else
             {
-                errorMessage = "Registration failed. Please try again.";
+                errorMessage = "Registraciya ámelge aspadı. Iltimas qayta urınıń.";
             }
         }
         catch (Exception ex)
         {
-            errorMessage = $"{ex.Message}, Registration failed. Please try again.";
+            errorMessage = $"{ex.Message}, Registraciya ámelge aspadı. Iltimas qayta urınıń.";
         }
         finally
         {

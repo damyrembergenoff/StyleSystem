@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StyleSystem.Api.Abstractions;
@@ -32,9 +33,18 @@ builder.Services.AddScoped<IImageStorageService, LocalImageStorageService>();
 builder.Services.AddScoped<SeedService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthenticationStateService, AuthenticationStateService>();
-builder.Services.AddScoped<ITextAiService, GroqAiService>();
-builder.Services.AddScoped<IImageAiService, CloudflareAiService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<ITranslateService, GeminiAiService>();
+builder.Services.AddHttpClient<ITextAiService, GroqAiService>(client =>
+{
+    client.DefaultRequestHeaders.Authorization = 
+        new AuthenticationHeaderValue("Bearer", builder.Configuration["Groq:ApiKey"]);
+});
+builder.Services.AddHttpClient<IImageAiService, CloudflareAiService>(client =>
+{
+    client.DefaultRequestHeaders.Authorization = 
+        new AuthenticationHeaderValue("Bearer", builder.Configuration["Cloudflare:ApiKey"]);
+});
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<JwtService>();
 builder.Configuration.AddUserSecrets<Program>();
@@ -69,7 +79,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy.WithOrigins(
-            "https://damyrembergenoff.github.io"
+            "https://damyrembergenoff.github.io",
+            "http://localhost:5074"
         )
         .AllowAnyHeader()
         .AllowAnyMethod();
