@@ -1,5 +1,9 @@
 {
   "provider": "Dotnet",
-  "buildCommand": "dotnet publish StyleSystem.Api/StyleSystem.Api.csproj -c Release -o out",
-  "startCommand": "dotnet out/StyleSystem.Api.dll"
+  "build": {
+    "cmds": ["dotnet publish StyleSystem.Api/StyleSystem.Api.csproj -c Release -o out"]
+  },
+  "deploy": {
+    "startCmd": "./out/StyleSystem.Api"
+  }
 }
