@@ -121,6 +121,30 @@ public class GeminiAiService(
         if (string.IsNullOrWhiteSpace(text))
             return text;
 
+        // Paragraflar bo'yicha bo'lish
+        var paragraphs = text
+            .Split(["\n\n", "\r\n\r\n"], StringSplitOptions.RemoveEmptyEntries)
+            .Select(p => p.Trim())
+            .Where(p => !string.IsNullOrWhiteSpace(p))
+            .ToList();
+
+        // Agar qisqa bo'lsa, to'g'ridan-to'g'ri tarjima
+        if (paragraphs.Count <= 1)
+            return await TranslateSingleChunkAsync(text, cancellationToken);
+
+        // Har bir paragrafni tarjima qilish
+        var translatedParts = new List<string>();
+        foreach (var paragraph in paragraphs)
+        {
+            var translated = await TranslateSingleChunkAsync(paragraph, cancellationToken);
+            translatedParts.Add(translated);
+        }
+
+        return string.Join("\n\n", translatedParts);
+    }
+
+    private async ValueTask<string> TranslateSingleChunkAsync(string text, CancellationToken cancellationToken)
+    {
         var endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={apiKey}";
 
         var bodyJson = JsonSerializer.Serialize(new GeminiRequest
@@ -148,7 +172,7 @@ public class GeminiAiService(
             GenerationConfig = new GeminiGenerationConfig
             {
                 Temperature = 0.1,
-                MaxOutputTokens = 2048
+                MaxOutputTokens = 8192  
             }
         }, JsonOptions);
 
@@ -167,16 +191,18 @@ public class GeminiAiService(
         }
 
         var rawJson = await response.Content.ReadAsStringAsync(cancellationToken);
-        logger.LogInformation("Gemini AI raw response: {RawJson}", rawJson);
 
+        // finishReason tekshirish
         var geminiResponse = JsonSerializer.Deserialize<GeminiResponse>(rawJson, JsonOptions);
-        var translated = geminiResponse?
-            .Candidates?[0]
-            .Content?
-            .Parts?[0]
-            .Text?
-            .Trim();
+        
+        var candidate = geminiResponse?.Candidates?[0];
+        
+        if (candidate?.FinishReason == "MAX_TOKENS")
+        {
+            logger.LogWarning("Translation truncated due to MAX_TOKENS for text: {Text}", text[..Math.Min(100, text.Length)]);
+        }
 
+        var translated = candidate?.Content?.Parts?[0].Text?.Trim();
         return translated ?? text;
     }
 
@@ -335,5 +361,8 @@ public class GeminiAiService(
     {
         [JsonPropertyName("content")]
         public GeminiContent? Content { get; set; }
+
+        [JsonPropertyName("finishReason")]
+        public string? FinishReason { get; set; }
     }
 }

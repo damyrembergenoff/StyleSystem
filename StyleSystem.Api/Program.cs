@@ -15,17 +15,6 @@ builder.Services.Configure<GroqOptions>(
     builder.Configuration.GetSection("Groq")
 );
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: "AllowedOrigins",
-        policy  =>
-        {
-            policy.WithOrigins("http://localhost:5074")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
-});
-
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IRecommendationService, RecommendationService>();
@@ -101,8 +90,8 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var seeder = scope.ServiceProvider.GetRequiredService<SeedService>();
-    await seeder.StartSeedingAsync();
+    var db = scope.ServiceProvider.GetRequiredService<StyleSystemDbContext>();
+    db.Database.Migrate();
 }
 
 app.UseHttpsRedirection();
