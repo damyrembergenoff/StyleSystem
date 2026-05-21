@@ -1,0 +1,5 @@
+{
+  "provider": "dotnet",
+  "buildCommand": "dotnet publish StyleSystem.Api/StyleSystem.Api.csproj -c Release -o out",
+  "startCommand": "dotnet out/StyleSystem.Api.dll"
+}
