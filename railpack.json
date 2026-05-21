@@ -2,6 +2,11 @@
   "$schema": "https://schema.railpack.com",
   "provider": "Dotnet",
   "steps": {
+    "install": {
+      "commands": [
+        "dotnet restore StyleSystem.Api/StyleSystem.Api.csproj"
+      ]
+    },
     "build": {
       "commands": [
         "dotnet publish StyleSystem.Api/StyleSystem.Api.csproj -c Release -o out"
