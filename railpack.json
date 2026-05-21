@@ -1,9 +1,14 @@
 {
+  "$schema": "https://schema.railpack.com",
   "provider": "Dotnet",
-  "build": {
-    "cmds": ["dotnet publish StyleSystem.Api/StyleSystem.Api.csproj -c Release -o out"]
+  "steps": {
+    "build": {
+      "commands": [
+        "dotnet publish StyleSystem.Api/StyleSystem.Api.csproj -c Release -o out"
+      ]
+    }
   },
   "deploy": {
-    "startCmd": "./out/StyleSystem.Api"
+    "startCommand": "./out/StyleSystem.Api"
   }
 }
