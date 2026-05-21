@@ -94,8 +94,8 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
-app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
+app.UseHttpsRedirection();
 
 app.UseStaticFiles(new StaticFileOptions
 {
