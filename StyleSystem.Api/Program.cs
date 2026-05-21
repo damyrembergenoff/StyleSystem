@@ -99,12 +99,6 @@ builder.Environment.WebRootPath = webRootPath;
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var seeder = scope.ServiceProvider.GetRequiredService<SeedService>();
-    await seeder.StartSeedingAsync();
-}
-
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 
