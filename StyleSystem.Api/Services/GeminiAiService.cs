@@ -116,34 +116,37 @@ public class GeminiAiService(
         }
     }
 
-    public async ValueTask<string> TranslateAsync(string text, CancellationToken cancellationToken = default)
+    public async ValueTask<(string Text, bool IsTranslated)> TranslateAsync(string text, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(text))
-            return text;
+            return (text, true);
 
-        // Paragraflar bo'yicha bo'lish
         var paragraphs = text
             .Split(["\n\n", "\r\n\r\n"], StringSplitOptions.RemoveEmptyEntries)
             .Select(p => p.Trim())
             .Where(p => !string.IsNullOrWhiteSpace(p))
             .ToList();
 
-        // Agar qisqa bo'lsa, to'g'ridan-to'g'ri tarjima
         if (paragraphs.Count <= 1)
-            return await TranslateSingleChunkAsync(text, cancellationToken);
-
-        // Har bir paragrafni tarjima qilish
-        var translatedParts = new List<string>();
-        foreach (var paragraph in paragraphs)
         {
-            var translated = await TranslateSingleChunkAsync(paragraph, cancellationToken);
-            translatedParts.Add(translated);
+            var (translated, isTranslated) = await TranslateSingleChunkAsync(text, cancellationToken);
+            return (translated, isTranslated);
         }
 
-        return string.Join("\n\n", translatedParts);
+        var translatedParts = new List<string>();
+        var allTranslated = true;
+
+        foreach (var paragraph in paragraphs)
+        {
+            var (translated, isTranslated) = await TranslateSingleChunkAsync(paragraph, cancellationToken);
+            translatedParts.Add(translated);
+            if (!isTranslated) allTranslated = false;
+        }
+
+        return (string.Join("\n\n", translatedParts), allTranslated);
     }
 
-    private async ValueTask<string> TranslateSingleChunkAsync(string text, CancellationToken cancellationToken)
+    private async ValueTask<(string Text, bool IsTranslated)> TranslateSingleChunkAsync(string text, CancellationToken cancellationToken)
     {
         var endpoint = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={apiKey}";
 
@@ -172,7 +175,7 @@ public class GeminiAiService(
             GenerationConfig = new GeminiGenerationConfig
             {
                 Temperature = 0.1,
-                MaxOutputTokens = 8192  
+                MaxOutputTokens = 8192
             }
         }, JsonOptions);
 
@@ -187,25 +190,22 @@ public class GeminiAiService(
         {
             var errorContent = await response.Content.ReadAsStringAsync(cancellationToken);
             logger.LogError("Gemini AI error [{StatusCode}]: {ErrorContent}", (int)response.StatusCode, errorContent);
-            throw new Exception($"Translation failed [{response.StatusCode}]: {errorContent}");
+            return (text, false); 
         }
 
         var rawJson = await response.Content.ReadAsStringAsync(cancellationToken);
 
-        // finishReason tekshirish
         var geminiResponse = JsonSerializer.Deserialize<GeminiResponse>(rawJson, JsonOptions);
-        
         var candidate = geminiResponse?.Candidates?[0];
-        
+
         if (candidate?.FinishReason == "MAX_TOKENS")
         {
             logger.LogWarning("Translation truncated due to MAX_TOKENS for text: {Text}", text[..Math.Min(100, text.Length)]);
         }
 
         var translated = candidate?.Content?.Parts?[0].Text?.Trim();
-        return translated ?? text;
+        return (translated ?? text, translated != null);
     }
-
     public async ValueTask<CreateRecommendationDto> TranslateRecommendationInputAsync(
     CreateRecommendationDto dto,
     CancellationToken cancellationToken = default)

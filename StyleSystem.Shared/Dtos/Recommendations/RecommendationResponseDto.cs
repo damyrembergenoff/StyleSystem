@@ -9,6 +9,7 @@ public class RecommendationResponseDto
     public string? Temperature { get; set; }
     public string? AdditionalPreferences { get; set; }
     public string? RecommendationText { get; set; }
+    public bool IsTranslated { get; set; } = true;
     public List<RecommendationImageDto> Images { get; set; } = [];
 }
 

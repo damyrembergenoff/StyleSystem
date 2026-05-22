@@ -56,9 +56,10 @@ public class RecommendationService(
             ?? throw new Exception("Failed to parse Groq response");
 
         logger.LogInformation("Started translating {text} to karakalpak from english", fashionResponse.Recommendation);
-        var translatedText = await translateService.TranslateAsync(fashionResponse.Recommendation!, cancellationToken);
+        var (translatedText, isTranslated) = await translateService.TranslateAsync(fashionResponse.Recommendation!, cancellationToken);
 
         recommendation.RecommendationText = translatedText;
+        ;
         logger.LogInformation("Translation completed: {translatedText}", translatedText);
 
         var imageBytes = await imageAiService.GenerateImagesAsync(fashionResponse.ImagePrompt!, count: 2, cancellationToken: cancellationToken);
@@ -82,7 +83,7 @@ public class RecommendationService(
         await context.SaveChangesAsync(cancellationToken);
 
         // 7. Response qaytarish
-        return MapToResponseDto(recommendation);
+        return MapToResponseDto(recommendation, isTranslated);
     }
 
     // ❌ Anonymous user uchun - DB ga saqlanmaydi
@@ -121,7 +122,7 @@ public class RecommendationService(
 
         logger.LogInformation("Started translating {text} to karakalpak from english", fashionResponse.Recommendation);
         
-        var translatedText = await translateService.TranslateAsync(fashionResponse.Recommendation!, cancellationToken);
+        var (translatedText, isTranslated) = await translateService.TranslateAsync(fashionResponse.Recommendation!, cancellationToken);
         
         logger.LogInformation("Translation completed: {translatedText}", translatedText);
 
@@ -130,6 +131,7 @@ public class RecommendationService(
         return new AnonymousRecommendationResponseDto
         {
             RecommendationText = translatedText,
+            IsTranslated = isTranslated,
             ImageUrls = imageUrls
         };
     }
@@ -144,7 +146,7 @@ public class RecommendationService(
             .Take(10)
             .ToListAsync();
 
-        return recommendations.Select(MapToResponseDto).ToList();
+        return recommendations.Select(r => MapToResponseDto(r, true)).ToList();
     }
 
     // ✅ Single recommendation
@@ -155,7 +157,7 @@ public class RecommendationService(
             .FirstOrDefaultAsync(r => r.Id == id && r.UserId == userId, cancellationToken)
             ?? throw new Exception("Recommendation not found");
 
-        return MapToResponseDto(recommendation);
+        return MapToResponseDto(recommendation, true);
     }
 
     // ============ PRIVATE HELPERS ============
@@ -328,7 +330,7 @@ public class RecommendationService(
     }
 
     // Entity → DTO
-    private RecommendationResponseDto MapToResponseDto(Recommendation recommendation)
+    private RecommendationResponseDto MapToResponseDto(Recommendation recommendation, bool isTranslated = true)
     {
         return new RecommendationResponseDto
         {
@@ -339,6 +341,7 @@ public class RecommendationService(
             Temperature = recommendation.Temperature,
             AdditionalPreferences = recommendation.AdditionalPreferences,
             RecommendationText = recommendation.RecommendationText,
+            IsTranslated = isTranslated,
             Images = recommendation.Images
                 .OrderBy(i => i.Order)
                 .Select(i => new RecommendationImageDto
@@ -347,7 +350,7 @@ public class RecommendationService(
                     ImageUrl = i.ImageUrl,
                     Order = i.Order
                 })
-                .ToList(),
+                .ToList()
         };
     }
 }

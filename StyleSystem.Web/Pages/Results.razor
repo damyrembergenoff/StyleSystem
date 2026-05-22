@@ -4,9 +4,7 @@
 @inject NavigationManager Navigation
 @inject StyleSystem.Web.Services.RecommendationStateService RecommendationState
 @inject StyleSystem.Web.Services.RecommendationApiService RecommendationApi
-@using System.Net.Http.Json
 @using StyleSystem.Web.Components
-@using StyleSystem.Web.Services
 
 <div class="results-container @(isLoading ? "loading" : "")">
     @if (isLoading)
@@ -53,6 +51,12 @@
                         AI stilist másláháti
                     </div>
                 </div>
+                @if (!isTranslated)
+                {
+                    <div class="translation-warning">
+                        ⚠ Translation servisinde xa'telik sebepli tekst awdarmalanbadı, inglis tilinde kórsetilmekte
+                    </div>
+                }
                 <div class="advice-content">
                     <p class="advice-text">@recommendationText</p>
                 </div>
@@ -121,6 +125,7 @@
     private int selectedOutfit = 0;
 
     private string? recommendationText;
+    private bool isTranslated;
     private List<string> imageUrls = new();
 
     protected override void OnInitialized()
@@ -148,6 +153,7 @@
         }
 
         recommendationText = RecommendationState.RecommendationText;
+        isTranslated = RecommendationState.IsTranslated;
         imageUrls          = RecommendationState.ImageUrls;
         RecommendationState.Clear();
     }

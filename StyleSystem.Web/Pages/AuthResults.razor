@@ -54,6 +54,12 @@
                         AI stilist másláháti
                     </div>
                 </div>
+                @if (!isTranslated)
+                {
+                    <div class="translation-warning">
+                        ⚠ Translation servisinde xa'telik sebepli tekst awdarmalanbadı, inglis tilinde kórsetilmekte
+                    </div>
+                }
                 <div class="advice-content">
                     <p class="advice-text">@recommendationText</p>
                 </div>
@@ -123,6 +129,7 @@
     private int selectedOutfit = 0;
 
     private string? recommendationText;
+    private bool isTranslated;
     private List<string> imageUrls = new();
 
     protected override async Task OnInitializedAsync()
@@ -154,6 +161,7 @@
         }
 
         recommendationText = RecommendationState.RecommendationText;
+        isTranslated = RecommendationState.IsTranslated;
         imageUrls          = RecommendationState.ImageUrls;
         RecommendationState.Clear();
     }
