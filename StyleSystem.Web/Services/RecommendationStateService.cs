@@ -8,15 +8,17 @@ public class RecommendationStateService
 
     public bool HasResult => !string.IsNullOrEmpty(RecommendationText) || ImageUrls.Count > 0;
 
-    public void SetResult(string? recommendationText, List<string> imageUrls)
+    public void SetResult(string? recommendationText, bool isTranslated, List<string> imageUrls)
     {
         RecommendationText = recommendationText;
+        IsTranslated = isTranslated;
         ImageUrls = imageUrls ?? [];
     }
 
     public void Clear()
     {
         RecommendationText = null;
+        IsTranslated = true;
         ImageUrls = [];
     }
 }

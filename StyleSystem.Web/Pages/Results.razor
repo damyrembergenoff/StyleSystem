@@ -51,14 +51,17 @@
                         AI stilist másláháti
                     </div>
                 </div>
-                @if (!isTranslated)
+                @if (isTranslated is false)
                 {
                     <div class="translation-warning">
                         ⚠ Translation servisinde xa'telik sebepli tekst awdarmalanbadı, inglis tilinde kórsetilmekte
                     </div>
                 }
                 <div class="advice-content">
-                    <p class="advice-text">@recommendationText</p>
+                    @foreach (var paragraph in recommendationText.Split(["\n\n", "\\n\\n"], StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        <p class="advice-text">@paragraph</p>
+                    }
                 </div>
             </div>
         }

@@ -111,7 +111,7 @@
                             @bind="occasion" 
                             id="occasion" 
                             class="input-field" 
-                            placeholder="máselen, Toy, Ofis, Kúndelikli shıǵıw, Sport zalı..."
+                            placeholder="máselen, Toy ma'resimi, Ofis, Kúndelikli shıǵıw, Sport zalı..."
                         />
                     </div>
 
@@ -285,7 +285,7 @@
 
             var result = await RecommendationApi.CreateAnonymousAsync(dto);
 
-            RecommendationState.SetResult(result?.RecommendationText, result?.ImageUrls ?? []);
+            RecommendationState.SetResult(result?.RecommendationText, result?.IsTranslated ?? true, result?.ImageUrls ?? []);
 
             Navigation.NavigateTo("results");
         }

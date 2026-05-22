@@ -54,14 +54,19 @@
                         AI stilist másláháti
                     </div>
                 </div>
-                @if (!isTranslated)
+                @if (isTranslated is false)
                 {
                     <div class="translation-warning">
                         ⚠ Translation servisinde xa'telik sebepli tekst awdarmalanbadı, inglis tilinde kórsetilmekte
                     </div>
                 }
                 <div class="advice-content">
-                    <p class="advice-text">@recommendationText</p>
+                    <p class="advice-text">
+                        @foreach (var paragraph in recommendationText.Split(["\n\n", "\\n\\n"], StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            <p class="advice-text">@paragraph</p>
+                        }
+                    </p>
                 </div>
             </div>
         }
@@ -174,6 +179,7 @@
             if (response != null)
             {
                 recommendationText = response.RecommendationText;
+                isTranslated = response.IsTranslated;
                 imageUrls = response.Images.Select(i => i.ImageUrl ?? "").ToList();
             }
             else

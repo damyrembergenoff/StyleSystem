@@ -26,7 +26,7 @@
                         @bind="occasion" 
                         id="occasion" 
                         class="input-field" 
-                        placeholder="máselen, Toy, Ofis, Kúndelikli shıǵıw, Sport zalı..."
+                        placeholder="máselen, Toy ma'resimi, Ofis, Kúndelikli shıǵıw, Sport zalı..."
                     />
                 </div>
 
@@ -148,7 +148,7 @@
                 .Select(i => i.ImageUrl!)
                 .ToList() ?? new List<string>();
 
-            RecommendationState.SetResult(result.RecommendationText, images);
+            RecommendationState.SetResult(result.RecommendationText, result.IsTranslated, images);
             Navigation.NavigateTo("authresults");
         }
         catch (Exception ex)
