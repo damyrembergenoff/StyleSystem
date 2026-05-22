@@ -122,7 +122,7 @@
                 {
                     <div class="recommendation-card">
                         <div class="recommendation-image">
-                            <NgrokImage Url="@GetFullImageUrl(activity.ImageUrl!)" alt="@activity.Occasion" />
+                            <NgrokImage Url="@activity.ImageUrl" alt="@activity.Occasion" />
                         </div>
                         <div class="recommendation-content">
                             <h3 class="recommendation-title">@activity.Occasion</h3>
@@ -184,14 +184,5 @@
             totalRecommendations = dashboardData.TotalRecommendations;
             thisMonth = dashboardData.ThisMonth;
         }
-    }
-
-    private string GetFullImageUrl(string url)
-    {
-        string webApiAddress = Configuration.GetValue<string>("WebApiAddress") ?? string.Empty;
-
-        if (string.IsNullOrWhiteSpace(url)) return string.Empty;
-        if (url.StartsWith("http://") || url.StartsWith("https://")) return url;
-        return $"{webApiAddress}/{url.TrimStart('/')}";
     }
 }

@@ -18,7 +18,7 @@ builder.Services.Configure<GroqOptions>(
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IRecommendationService, RecommendationService>();
-builder.Services.AddScoped<IImageStorageService, LocalImageStorageService>();
+builder.Services.AddScoped<IImageStorageService, SupabaseImageStorageService>();
 builder.Services.AddScoped<SeedService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthenticationStateService, AuthenticationStateService>();

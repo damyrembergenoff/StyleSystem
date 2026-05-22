@@ -74,7 +74,7 @@
                         <div class="outfit-card @(selectedOutfit == index ? "selected" : "")"
                              @onclick="@(() => SelectOutfit(index))">
                             <div class="outfit-image-wrapper">
-                                <NgrokImage Url="@GetFullImageUrl(url)" alt="Outfir" class="outfit-image"/>
+                                <NgrokImage Url="@url" alt="Outfir" class="outfit-image"/>
                                 @if (selectedOutfit == index)
                                 {
                                     <div class="selected-badge">
@@ -150,15 +150,6 @@
         recommendationText = RecommendationState.RecommendationText;
         imageUrls          = RecommendationState.ImageUrls;
         RecommendationState.Clear();
-    }
-
-    private string GetFullImageUrl(string url)
-    {
-        string webApiAddress = Configuration.GetValue<string>("WebApiAddress") ?? string.Empty;
-
-        if (string.IsNullOrWhiteSpace(url)) return string.Empty;
-        if (url.StartsWith("http://") || url.StartsWith("https://")) return url;
-        return $"{webApiAddress}/{url.TrimStart('/')}";
     }
 
     private void SelectOutfit(int index) => selectedOutfit = index;
