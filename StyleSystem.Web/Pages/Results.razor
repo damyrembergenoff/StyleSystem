@@ -58,7 +58,7 @@
                     </div>
                 }
                 <div class="advice-content">
-                    @foreach (var paragraph in recommendationText.Split(["\n\n", "\\n\\n"], StringSplitOptions.RemoveEmptyEntries))
+                    @foreach (var paragraph in recommendationText.Split(["\n\n", "\\n\\n", "\n", "\\n"], StringSplitOptions.RemoveEmptyEntries))
                     {
                         <p class="advice-text">@paragraph</p>
                     }
