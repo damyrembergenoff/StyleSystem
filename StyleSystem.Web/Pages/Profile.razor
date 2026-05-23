@@ -113,7 +113,7 @@
                             <label class="form-label">Jınıs</label>
                             @if (isEditing)
                             {
-                                <select @bind="userProfile.Gender" @onchanged="OnGenderChanged" class="form-select">
+                                <select @bind="userProfile.Gender" @bind:after="UpdateAvailableBodyTypes" class="form-select">
                                     <option value="">Jınısıńızdı tanlań</option>
                                     <option value="Male">Erkek</option>
                                     <option value="Female">Hayal</option>
@@ -229,15 +229,15 @@
             }
 
             <div class="form-group">
-                <label class="form-label">Current Password</label>
+                <label class="form-label">Házirgi Parol</label>
                 <input type="password" @bind="currentPassword" class="form-input" placeholder="••••••••" />
             </div>
             <div class="form-group">
-                <label class="form-label">New Password</label>
+                <label class="form-label">Jańa Parol</label>
                 <input type="password" @bind="newPassword" class="form-input" placeholder="••••••••" />
             </div>
             <div class="form-group">
-                <label class="form-label">Confirm New Password</label>
+                <label class="form-label">Jańa Paroldı Tastıyıqlaw</label>
                 <input type="password" @bind="confirmPassword" class="form-input" placeholder="••••••••" />
             </div>
             <div class="modal-actions">
@@ -303,6 +303,7 @@
 
     private void UpdateAvailableBodyTypes()
     {
+        userProfile.BodyType = ""; // Jins o'zgarganda eski body typeni tozalash
         availableBodyTypes = userProfile.Gender switch
         {
             "Male" => new List<string> { "Rectangle", "Triangle", "InvertedTriangle", "Trapezoid", "Oval" },
@@ -353,7 +354,7 @@
             if (response.IsSuccessStatusCode)
             {
                 isEditing = false;
-                SuccessMessage = "Profile updated successfully!";
+                SuccessMessage = "Profil jańalandı!";
                 await LoadProfileAsync(); // Reload to get updated data
             }
             else
@@ -393,31 +394,31 @@
         // Client-side validation
         if (string.IsNullOrWhiteSpace(currentPassword))
         {
-            ErrorMessage = "Current password is required";
+            ErrorMessage = "Ha'zirgi parol ma'jbu'riy";
             return;
         }
 
         if (string.IsNullOrWhiteSpace(newPassword))
         {
-            ErrorMessage = "New password is required";
+            ErrorMessage = "Jan'a parol ma'jbu'riy";
             return;
         }
 
         if (string.IsNullOrWhiteSpace(confirmPassword))
         {
-            ErrorMessage = "Password confirmation is required";
+            ErrorMessage = "Tastıyıqlaw parolı ma'jbu'riy";
             return;
         }
 
         if (newPassword.Length < 6)
         {
-            ErrorMessage = "New password must be at least 6 characters";
+            ErrorMessage = "Jańa parol keminde 6 belgiden ibarat bolıwı kerek";
             return;
         }
 
         if (newPassword != confirmPassword)
         {
-            ErrorMessage = "New passwords do not match";
+            ErrorMessage = "Jańa parollar sáykes kelmeydi";
             return;
         }
 
@@ -435,7 +436,7 @@
 
             if (response.IsSuccessStatusCode)
             {
-                SuccessMessage = "Password changed successfully!";
+                SuccessMessage = "Parol o'zgertirildi!";
                 ClosePasswordModal();
             }
             else
@@ -446,14 +447,13 @@
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"An error occurred while changing the password: {ex.Message}";
-            Console.WriteLine($"Error changing password: {ex.Message}");
+            ErrorMessage = $"Paroldi ózgertiwde qátelik júz berdi: {ex.Message}";
         }
     }
 
     private async Task DeleteAccount()
     {
-        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure you want to delete your account? This action cannot be undone.");
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "Haqıyqatında da esaptı óshiriwdi qáleysiz be? Bul háreketti qaytarıp bolmaydı.");
         if (confirmed)
         {
             try
