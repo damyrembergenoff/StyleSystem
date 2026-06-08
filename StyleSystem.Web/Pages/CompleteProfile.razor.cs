@@ -37,74 +37,74 @@ public partial class CompleteProfile
     {
         new BodyTypeOption 
         { 
-            Value = "Rectangle", 
-            Name = "Rectangle", 
-            Description = "Dúziw dene, bel hám iyin keńligi birdey."
-        },
-        new BodyTypeOption 
-        { 
-            Value = "Triangle", 
-            Name = "Triangle", 
-            Description = "Jambasları keńirek, iyinleri tar"
-        },
-        new BodyTypeOption 
-        { 
             Value = "InvertedTriangle", 
-            Name = "Inverted Triangle", 
+            Name = "Teris Úshmúyeshlik", 
             Description = "Iyinleri keń, beli tar."
         },
         new BodyTypeOption 
         { 
-            Value = "Trapezoid", 
-            Name = "Trapezoid", 
-            Description = "Atletik deneli, iyinleri jambasqa qaraganda biraz keńirek."
+            Value = "Rectangle", 
+            Name = "Tórtmúyeshlik ", 
+            Description = "Dúziw dene, bel hám iyin keńligi birdey."
         },
         new BodyTypeOption 
         { 
             Value = "Oval", 
             Name = "Oval", 
             Description = "Orta bólimi domalaq, ayaq-qolları jińishke."
-        }
+        },
+        new BodyTypeOption 
+        { 
+            Value = "Trapezoid", 
+            Name = "Trapeciya", 
+            Description = "Atletik deneli, iyinleri jambasqa qaraganda biraz keńirek."
+        },
+        new BodyTypeOption 
+        { 
+            Value = "Triangle", 
+            Name = "Úshmúyeshlik ", 
+            Description = "Jambasları keńirek, iyinleri tar"
+        },
     };
 
     private List<BodyTypeOption> femaleBodyTypes = new()
     {
         new BodyTypeOption 
         { 
-            Value = "Hourglass", 
-            Name = "Hourglass", 
-            Description = "Balanstırılǵan kókirek hám jambas, bel belgilengen."
-        },
-        new BodyTypeOption 
-        { 
-            Value = "Pear", 
-            Name = "Pear", 
-            Description = "jambas keńirek, kókirek kishirek"
-        },
-        new BodyTypeOption 
-        { 
-            Value = "Apple", 
-            Name = "Apple", 
-            Description = "Orta bólimi keń, ayaqları jinishke."
-        },
-        new BodyTypeOption 
-        { 
-            Value = "Rectangle", 
-            Name = "Rectangle", 
-            Description = "Tuwrı figura, uqsas ólshemler"
-        },
-        new BodyTypeOption 
-        { 
             Value = "InvertedTriangle", 
-            Name = "Inverted Triangle", 
+            Name = "Teris Úshmúyeshlik", 
             Description = "Keń jawırın, tar jambas."
         },
         new BodyTypeOption 
         { 
+            Value = "Hourglass", 
+            Name = "Qum Saat", 
+            Description = "Balanstırılǵan kókirek hám jambas, bel belgilengen."
+        },
+        new BodyTypeOption 
+        { 
+            Value = "Rectangle", 
+            Name = "Tórtmúyeshlik", 
+            Description = "Tuwrı figura, uqsas ólshemler"
+        },
+        new BodyTypeOption 
+        { 
+            Value = "Apple", 
+            Name = "Dóńgelek", 
+            Description = "Orta bólimi keń, ayaqları jinishke."
+        },
+        new BodyTypeOption 
+        { 
             Value = "Diamond", 
-            Name = "Diamond", 
+            Name = "Almas", 
             Description = "Orta bólimi keńirek, tóbesi hám astı jińishke."
-        }
+        },
+        new BodyTypeOption 
+        { 
+            Value = "Pear", 
+            Name = "Úshmúyeshlik", 
+            Description = "jambas keńirek, kókirek kishirek"
+        },
     };
 
     // Skin Tones

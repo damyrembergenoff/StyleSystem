@@ -174,25 +174,66 @@
             </form>
         </div>
 
-        <!-- Features Preview -->
-        <div class="features-preview">
-            <div class="feature-item">
-                <div class="feature-icon">🎨</div>
-                <div class="feature-title">AI menen isleytuǵın</div>
-                <div class="feature-text">Aqıllı kiyim jaratıwshı</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">👔</div>
-                <div class="feature-title">Jekelestirilgen</div>
-                <div class="feature-text">Deneńizge say</div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">⚡</div>
-                <div class="feature-title">Tez waqıtta</div>
-                <div class="feature-text">Sekund ishinde nátiyjeler</div>
+    </div>
+
+    <!-- Features Section -->
+        <div id="features" class="features-section">
+            <h2 class="landing-section-title">Ózgeshelikler</h2>
+            <div class="features-grid">
+                <div class="lp-feature-card">
+                    <span class="lp-feature-icon">🎨</span>
+                    <div class="lp-feature-title">AI menen isleytuǵın</div>
+                    <div class="lp-feature-text">Aqıllı kiyim jaratıwshı — sizge máslahát beredi</div>
+                </div>
+                <div class="lp-feature-card">
+                    <span class="lp-feature-icon">👔</span>
+                    <div class="lp-feature-title">Jekelestirilgen</div>
+                    <div class="lp-feature-text">Dene tipińiz, jınısıńız hám stilińizge say usınıslar</div>
+                </div>
+                <div class="lp-feature-card">
+                    <span class="lp-feature-icon">⚡</span>
+                    <div class="lp-feature-title">Tez waqıtta</div>
+                    <div class="lp-feature-text">Bir neshe sekund ishinde tolıq stil usınısı</div>
+                </div>
             </div>
         </div>
-    </div>
+
+        <!-- How It Works Section -->
+        <div id="how-it-works" class="how-section">
+            <h2 class="landing-section-title">Qanday isleydi?</h2>
+            <div class="how-steps">
+                <div class="how-step">
+                    <div class="lp-step-number">1</div>
+                    <div class="lp-step-title">Maǵlıwmat beriń</div>
+                    <div class="lp-step-text">Jınısıńız, dene tipińiz, mánzil hám máwsimdi tańlań</div>
+                </div>
+                <div class="how-step">
+                    <div class="lp-step-number">2</div>
+                    <div class="lp-step-title">AI analiz etedi</div>
+                    <div class="lp-step-text">Jasalma intellekt parametrlerińizdi qayta islep stilińizdi anıqlaydı</div>
+                </div>
+                <div class="how-step">
+                    <div class="lp-step-number">3</div>
+                    <div class="lp-step-title">Usınıs alıń</div>
+                    <div class="lp-step-text">Sizge sáykeslengen kiyim kombinatsiyaların alıń</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div id="about" class="about-section">
+            <h2 class="landing-section-title">Biz haqqımızda</h2>
+            <p class="lp-about-text">
+                <strong>StyleSystem</strong> — jasalma intellekt texnologiyaları arqalı 
+                hár bir adamǵa ózine sáykeslengen moda usınısların beriwshi platforma.
+            </p>
+            <p class="lp-about-text">
+                Biz siziń dene tipiniz, stilińiz hám qalay kóriniwge bolǵan
+                qálewińizdi esapqa alǵan halda, AI járdeminde personallastırılǵan
+                kiyim kombinaciyaların jaratamız.
+            </p>
+        </div>
+
 </div>
 
 @code {
@@ -223,21 +264,21 @@
     // Body type mappings
     private List<BodyTypeOption> maleBodyTypes = new()
     {
-        new("Rectangle", "Rectangle"),
-        new("InvertedTriangle", "Inverted Triangle"),
-        new("Trapezoid", "Trapezoid"),
-        new("Triangle", "Triangle"),
-        new("Oval", "Oval")
+        new("InvertedTriangle", "Teris Úshmúyeshlik"),
+        new("Rectangle", "Tórtmúyeshlik"),
+        new("Oval", "Oval"),
+        new("Trapezoid", "Trapeciya"),
+        new("Triangle", "Úshmúyeshlik"),
     };
 
     private List<BodyTypeOption> femaleBodyTypes = new()
     {
-        new("Rectangle", "Rectangle"),
-        new("Pear", "Pear/Triangle"),
-        new("Hourglass", "Hourglass"),
-        new("InvertedTriangle", "Inverted Triangle"),
-        new("Diamond", "Diamond"),
-        new("Apple", "Round/Apple")
+        new("InvertedTriangle", "Teris Úshmúyeshlik"),
+        new("Hourglass", "Qum Saat"),
+        new("Rectangle", "Tórtmúyeshlik"),
+        new("Apple", "Dóńgelek"),
+        new("Diamond", "Almas"),
+        new("Pear", "Úshmúyeshlik"),
     };
 
     private void SelectGender(string gender)

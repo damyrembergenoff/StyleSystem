@@ -79,16 +79,16 @@ body {
 
 /* === LANDING PAGE LAYOUT === */
 .landing-page {
-  min-height: calc(100vh - 73px); /* Subtract navbar height */
+  /* min-height: calc(100vh - 73px); Subtract navbar height */
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding-bottom: var(--spacing-3xl);
+  /* padding-bottom: var(--spacing-3xl); */
 }
 
 /* Background Image Overlay */
 .landing-bg {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -118,7 +118,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  min-height: calc(100vh - 73px);
+  min-height: 100vh;
   padding: var(--spacing-2xl) var(--spacing-lg);
   text-align: center;
 }
@@ -2903,4 +2903,171 @@ body {
     font-size: 11px;
     color: #64748b;
     line-height: 1.4;
+}
+
+/* ===== LANDING PAGE SECTIONS (lp- prefixed, safe) ===== */
+.features-section,
+.how-section,
+.about-section {
+    position: relative;
+    z-index: 5;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 20px;
+    text-align: center;
+    scroll-margin-top: 80px;
+}
+
+.about-section {
+    max-width: 800px;
+    padding-bottom: 120px;
+}
+
+.landing-section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 48px;
+    letter-spacing: -0.5px;
+}
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.lp-feature-card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 36px 24px;
+    transition: transform 0.25s, background 0.25s;
+}
+
+.lp-feature-card:hover {
+    transform: translateY(-6px);
+    background: rgba(255, 255, 255, 0.13);
+    border-color: rgba(236, 72, 153, 0.4);
+}
+
+.lp-feature-icon {
+    font-size: 2.8rem;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.lp-feature-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.lp-feature-text {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+}
+
+/* How It Works */
+.how-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    position: relative;
+}
+
+.how-step {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 36px 24px 28px;
+    transition: transform 0.25s;
+}
+
+.how-step:hover {
+    transform: translateY(-4px);
+    border-color: rgba(139, 92, 246, 0.4);
+}
+
+.lp-step-number {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: white;
+    margin: 0 auto 20px;
+    box-shadow: 0 4px 20px rgba(236, 72, 153, 0.35);
+}
+
+.lp-step-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.lp-step-text {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+}
+
+/* About */
+.lp-about-text {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+.about-stats {
+    display: flex;
+    justify-content: center;
+    gap: 56px;
+    margin-top: 52px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.lp-stat-number {
+    font-size: 2.4rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.lp-stat-label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 6px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .features-grid,
+    .how-steps {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-section-title {
+        font-size: 1.6rem;
+    }
+
+    .about-stats {
+        gap: 32px;
+    }
 }
